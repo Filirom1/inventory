@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+gem 'midi-smtp-server'
+gem 'rest-client'
+gem 'gserver'
+gem 'mail'
+gem 'filum'
