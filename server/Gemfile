@@ -1,8 +1,4 @@
 source 'https://rubygems.org'
-gem 'midi-smtp-server'
-gem 'rest-client'
-gem 'gserver'
-gem 'mail'
-gem 'filum'
-gem 'json'
-gem 'crack'
+
+# Specify your gem's dependencies in inventory-server.gemspec
+gemspec
