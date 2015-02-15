@@ -10,7 +10,7 @@ module Inventory
 
       def initialize(config)
         @config = config
-        super(config[:port], config[:host], config[:maxConnections])
+        super(config[:smtp_port], config[:host], config[:maxConnections])
       end
 
       def on_message_data_event(ctx)

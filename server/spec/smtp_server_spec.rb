@@ -26,7 +26,7 @@ RSpec.describe Inventory::Server::SMTPServer do
       # Start SMTPServer
       config = {
         :host => HOST, 
-        :port => PORT,
+        :smtp_port => PORT,
         :maxConnections => 1,
         :middleware => lambda { |env|  
           executed += 1

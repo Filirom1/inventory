@@ -7,9 +7,11 @@ Filum.setup '/dev/null'
 
 noop = lambda {|env|}
 
+ES_HOST = 'http://localhost:9200'
+
 RSpec.describe Inventory::Server::EmailParser, '#call' do
   context "without id" do
-    env = {:facts => { :key => 'value' } }
+    env = {:facts => { :key => 'value' }, :config => { :es_host => ES_HOST }  }
     it "should throw an error" do
       expect {
         Inventory::Server::Index.new(noop).call(env)
@@ -18,7 +20,7 @@ RSpec.describe Inventory::Server::EmailParser, '#call' do
   end
 
   context "without facts" do
-    env = {:id => 'MY_UUID' }
+    env = {:id => 'MY_UUID', :config => { :es_host => ES_HOST }  }
     it "should throw an error" do
       expect {
         Inventory::Server::Index.new(noop).call(env)
@@ -27,10 +29,10 @@ RSpec.describe Inventory::Server::EmailParser, '#call' do
   end
 
   context "with an ElasticSearch Server Crashed" do
-    env = {:id => 'MY_UUID', :facts => { :key => 'value' } }
+    env = {:id => 'MY_UUID', :facts => { :key => 'value' }, :config => { :es_host => ES_HOST } }
 
     it "should throw an error" do
-      stub_request(:put, "http://localhost:9200//server/1.0.0/MY_UUID").to_return(:status => [500, "Internal Server Error"], :body => '{"OK": false}')
+      stub_request(:put, "#{ES_HOST}/server/1.0.0/MY_UUID").to_return(:status => [500, "Internal Server Error"], :body => '{"OK": false}')
 
       expect {
         Inventory::Server::Index.new(noop).call(env)
@@ -39,10 +41,10 @@ RSpec.describe Inventory::Server::EmailParser, '#call' do
   end
 
   context "with an ElasticSearch Server" do
-    env = {:id => 'MY_UUID', :facts => { :key => 'value' } }
+    env = {:id => 'MY_UUID', :facts => { :key => 'value' } , :config => { :es_host => ES_HOST } }
 
     it "should call ElasticSearch" do
-      stub = stub_request(:put, "http://localhost:9200//server/1.0.0/MY_UUID").to_return(:body => '{"OK": true}')
+      stub = stub_request(:put, "#{ES_HOST}/server/1.0.0/MY_UUID").to_return(:body => '{"OK": true}')
 
       Inventory::Server::Index.new(noop).call(env)
 

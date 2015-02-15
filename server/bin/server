@@ -2,7 +2,7 @@
 
 require 'inventory/server'
 
-server = Inventory::Server::Server.new(:port => 2525, :host => "127.0.0.1", :debug => ENV['DEBUG'], :maxConnections => 4)
+server = Inventory::Server::Server.new(:smtp_port => 2525, :host => "127.0.0.1")
 server.start
 
 BEGIN {

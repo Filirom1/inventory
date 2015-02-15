@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     inventory-server (0.0.1)
+      app_configuration
       crack
       filum
       gserver
@@ -15,6 +16,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     addressable (2.3.7)
+    app_configuration (0.0.3)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
     diff-lcs (1.2.5)

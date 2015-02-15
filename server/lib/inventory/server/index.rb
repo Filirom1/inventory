@@ -20,7 +20,7 @@ module Inventory
       def call(env)
         Filum.logger.info "Index"
 
-        es_host = env[:es_host] || "http://localhost:9200/"
+        es_host = env[:config][:es_host] || "http://localhost:9200/"
 
         # Index it into elasticsearch
         id = env[:id]

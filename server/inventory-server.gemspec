@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'json'
   spec.add_dependency 'crack'
   spec.add_dependency 'middleware'
+  spec.add_dependency 'app_configuration'
 
   spec.add_development_dependency "bundler", "~> 1.7"
   spec.add_development_dependency "rake", "~> 10.0"

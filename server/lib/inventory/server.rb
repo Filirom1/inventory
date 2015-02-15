@@ -4,6 +4,7 @@ require "inventory/server/version"
 
 module Inventory
   module Server
+    autoload :Config,      'inventory/server/config'
     autoload :SMTPServer,  'inventory/server/smtp_server'
     autoload :EmailParser, 'inventory/server/email_parser'
     autoload :FactsParser, 'inventory/server/facts_parser'
@@ -12,16 +13,9 @@ module Inventory
     class Server
 
       def initialize(config)
-        @config = config
-        Filum.setup($stdout)
-
-        if config[:debug]
-          Filum.logger.level = Logger::DEBUG
-        else
-          Filum.logger.level = Logger::INFO
-        end
-
-        Filum.logger.debug config.inspect
+        @config = Config.new(config)
+        Filum.setup(@config[:logger])
+        Filum.logger.level = @config[:log_level]
 
         config[:middleware] = Middleware::Builder.new do
           use EmailParser
@@ -34,7 +28,7 @@ module Inventory
       end
 
       def start()
-        Filum.logger.info "Server started, listening on #{@config[:host]}:#{@config[:port]}"
+        Filum.logger.info "Server started, listening on #{@config[:host]}:#{@config[:smtp_port]}"
         @smtp_server.start
         @smtp_server.audit = @config[:debug]
         @smtp_server.join
