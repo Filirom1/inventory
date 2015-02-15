@@ -1,4 +1,4 @@
-# Inventory::Server [![Code Climate](https://codeclimate.com/github/Filirom1/inventory/badges/gpa.svg)](https://codeclimate.com/github/Filirom1/inventory)
+# Inventory::Server  [![Build Status](https://travis-ci.org/Filirom1/inventory.svg?branch=master)](https://travis-ci.org/Filirom1/inventory) [![Code Climate](https://codeclimate.com/github/Filirom1/inventory/badges/gpa.svg)](https://codeclimate.com/github/Filirom1/inventory)
 
 Inventory server store and index data sent from the agent
 
