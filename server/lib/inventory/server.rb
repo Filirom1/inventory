@@ -7,7 +7,7 @@ module Inventory
     autoload :SMTPServer,  'inventory/server/smtp_server'
     autoload :EmailParser, 'inventory/server/email_parser'
     autoload :FactsParser, 'inventory/server/facts_parser'
-    autoload :Store,       'inventory/server/store'
+    autoload :Index,       'inventory/server/index'
 
     class Server
 
@@ -26,7 +26,7 @@ module Inventory
         config[:middleware] = Middleware::Builder.new do
           use EmailParser
           use FactsParser
-          use Store
+          use Index
           #use WebHooks
         end
 

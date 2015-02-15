@@ -11,14 +11,13 @@ module Inventory
 
       def call(env)
         Filum.logger.info "Facts parser"
-        data = env[:body]
-        raise "data missing" if !data
+        body = env[:body]
+        raise "body missing" if body.nil? || body.empty?
 
-        format = guess_format data
+        format = guess_format body
         raise "bad format" if !format
 
-        env[:facts] = parse(format, data)
-
+        env[:facts] = parse(format, body)
         @app.call(env)
       end
 
@@ -37,7 +36,13 @@ module Inventory
         case format
         when :xml
           hash = Crack::XML.parse(str)
-          decode_base64(nil, hash)
+          xml = decode_base64(nil, hash)
+          keys = xml.keys
+          if keys.length == 1
+            return xml[keys[0]] 
+          else
+            return xml
+          end
         when :json
           JSON.parse str
         when :yaml
