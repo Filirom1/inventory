@@ -39,6 +39,19 @@ module Inventory
         @smtp_server.audit = @config[:debug]
         @smtp_server.join
       end
+
+      # Stop the server garcefully
+      def stop()
+        Filum.logger.info "Server is shutting down gracefully"
+        @smtp_server.shutdown()
+
+        unless @smtp_server.connections == 0
+          Filum.logger.info "Still #{@smtp_server.connections} connections, wait 1 seconds"
+          sleep 1
+        end
+
+        @smtp_server.stop
+      end
     end
   end
 end

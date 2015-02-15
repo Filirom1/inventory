@@ -2,8 +2,6 @@ require 'rest-client'
 require 'json'
 require 'filum'
 
-BASE_URL="http://localhost:9200/"
-
 # Forward RestClient logs to Filum
 RestClient.log =
   Object.new.tap do |proxy|
@@ -22,6 +20,8 @@ module Inventory
       def call(env)
         Filum.logger.info "Index"
 
+        es_host = env[:es_host] || "http://localhost:9200/"
+
         # Index it into elasticsearch
         id = env[:id]
         facts = env[:facts]
@@ -31,7 +31,7 @@ module Inventory
         type = facts['type'] || 'server'
         version = facts['version'] || '1.0.0'
         begin
-          response = RestClient.put("#{BASE_URL}/#{type}/#{version}/#{id}", facts.to_json)
+          response = RestClient.put("#{es_host}/#{type}/#{version}/#{id}", facts.to_json)
           Filum.logger.info response
         rescue => e
           if e.respond_to?(:response)

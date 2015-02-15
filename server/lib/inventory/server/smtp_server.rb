@@ -16,18 +16,17 @@ module Inventory
       def on_message_data_event(ctx)
         begin 
           # execute middlewares
-          @config[:middleware].call(:ctx => ctx)
+          @config[:middleware].call(:ctx => ctx, :config => @config)
         rescue => e
           Filum.logger.error $!
           Filum.logger.error "#{e.backtrace.join("\n\t")}"
-          raise e
+
+          # dot not raise the error to avoid the SMTP server relay to defer malformed emails
         end
       end
 
       def log(msg)
-        if @stdlog
-          Filum.logger.debug msg
-        end
+        Filum.logger.debug msg
       end
     end
   end
