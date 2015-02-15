@@ -1,4 +1,4 @@
-# Inventory::Server
+# Inventory::Server [![Code Climate](https://codeclimate.com/github/Filirom1/inventory/badges/gpa.svg)](https://codeclimate.com/github/Filirom1/inventory)
 
 Inventory server store and index data sent from the agent
 
