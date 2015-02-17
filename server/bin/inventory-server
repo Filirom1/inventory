@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+require 'inventory/server'
+require 'inventory/server/cli'
+
+options = Inventory::Server::CLI.new().parse! ARGV
+
+server = Inventory::Server::Server.new(options)
+server.start
+
+BEGIN {
+  at_exit {
+    server.stop if server
+  }
+}

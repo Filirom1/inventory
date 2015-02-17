@@ -34,7 +34,7 @@ module Inventory
         @smtp_server.join
       end
 
-      # Stop the server garcefully
+      # Stop the server gracefully
       def stop()
         Filum.logger.info "Server is shutting down gracefully"
         @smtp_server.shutdown()

@@ -27,7 +27,7 @@ RSpec.describe Inventory::Server::SMTPServer do
       config = {
         :host => HOST, 
         :smtp_port => PORT,
-        :maxConnections => 1,
+        :max_connections => 1,
         :middleware => lambda { |env|  
           executed += 1
           raise 'my custom error message' if trigger_error

@@ -10,7 +10,7 @@ module Inventory
         @defaults = {
           :host => '127.0.0.1',
           :smtp_port => 2525,
-          :maxConnections => 4,
+          :max_connections => 4,
           :debug => false,
           :es_host => 'http://localhost:9200',
           :logger => 'stdout',
