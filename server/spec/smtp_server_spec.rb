@@ -28,13 +28,13 @@ RSpec.describe Inventory::Server::SMTPServer do
         :host => HOST, 
         :smtp_port => PORT,
         :max_connections => 1,
-        :middleware => lambda { |env|  
-          executed += 1
-          raise 'my custom error message' if trigger_error
-        }
+      }
+      middleware = lambda { |env|  
+        executed += 1
+        raise 'my custom error message' if trigger_error
       }
 
-      smtp_server = Inventory::Server::SMTPServer.new(config)
+      smtp_server = Inventory::Server::SMTPServer.new(config, middleware)
       smtp_server.audit = true
       smtp_server.start
     end

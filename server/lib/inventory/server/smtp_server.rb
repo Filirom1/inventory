@@ -1,6 +1,7 @@
 require "rubygems"
 require "midi-smtp-server"
 require 'filum'
+require "inventory/server/email_parser"
 
 module Inventory
   module Server
@@ -8,15 +9,18 @@ module Inventory
     # Create an SMTP Server
     class SMTPServer < MidiSmtpServer
 
-      def initialize(config)
+      def initialize(config, middleware)
         @config = config
+        @middleware = middleware
         super(config[:smtp_port], config[:host], config[:max_connections])
       end
 
       def on_message_data_event(ctx)
         begin 
           # execute middlewares
-          @config[:middleware].call(:ctx => ctx, :config => @config)
+          id, body = EmailParser.parse(ctx[:message])
+          Filum.logger.context_id = email_subject
+          @middleware.call(:id => id, :body => body, :config => @config)
         rescue => e
           Filum.logger.error $!
           Filum.logger.error "#{e.backtrace.join("\n\t")}"
