@@ -19,8 +19,8 @@ module Inventory
         begin 
           # execute middlewares
           id, body = EmailParser.parse(ctx[:message])
-          Filum.logger.context_id = email_subject
-          @middleware.call(:id => id, :body => body, :config => @config)
+          Filum.logger.context_id = id
+          @middleware.call(:id => id, :body => body)
         rescue => e
           Filum.logger.error $!
           Filum.logger.error "#{e.backtrace.join("\n\t")}"
