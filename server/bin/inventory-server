@@ -12,7 +12,7 @@ options = server.config
 
 Filum.logger.info "SMTP Server started, listening on #{options[:host]}:#{options[:smtp_port]}"
 
-smtp_server = Inventory::Server::SMTPServer.new(options, server.middleware)
+smtp_server = Inventory::Server::SMTPServer.new(options, server.middlewares)
 smtp_server.start
 smtp_server.join
 

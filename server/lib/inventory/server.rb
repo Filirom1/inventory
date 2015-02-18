@@ -8,7 +8,7 @@ require "inventory/server/index"
 module Inventory
   module Server
     class Server
-      attr_reader :config, :middleware
+      attr_reader :config, :middlewares
 
       def initialize(cli_config)
         @config = Config.new(cli_config)
@@ -16,7 +16,7 @@ module Inventory
         Filum.setup(@config[:logger])
         Filum.logger.level = @config[:log_level]
 
-        @middleware = Middleware::Builder.new do
+        @middlewares = Middleware::Builder.new do
           use FactsParser
           use Index
           #use WebHooks

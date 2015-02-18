@@ -9,9 +9,9 @@ module Inventory
     # Create an SMTP Server
     class SMTPServer < MidiSmtpServer
 
-      def initialize(config, middleware)
+      def initialize(config, middlewares)
         @config = config
-        @middleware = middleware
+        @middlewares = middlewares
         @audit = @config[:debug]
         super(config[:smtp_port], config[:host], config[:max_connections])
       end
@@ -21,7 +21,7 @@ module Inventory
           # execute middlewares
           id, body = EmailParser.parse(ctx[:message])
           Filum.logger.context_id = id
-          @middleware.call(:id => id, :body => body)
+          @middlewares.call(:id => id, :body => body)
         rescue => e
           Filum.logger.error $!
           Filum.logger.error "#{e.backtrace.join("\n\t")}"
