@@ -57,7 +57,7 @@ module Inventory
             decode_base64(key, value)
           elsif value.is_a? String and value.include? "__base64__"
             value.slice!("__base64__")
-            myHash[key] = Base64.decode64(value)
+            myHash[key] = Base64.decode64(value).force_encoding("ASCII-8BIT").encode('UTF-8', undef: :replace, replace: '')
           end
         }
       end
