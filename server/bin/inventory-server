@@ -1,15 +1,33 @@
 #!/usr/bin/env ruby
 
+require 'filum'
 require 'inventory/server'
 require 'inventory/server/cli'
+require 'inventory/server/smtp_server'
 
-options = Inventory::Server::CLI.new().parse! ARGV
+cli_options = Inventory::Server::CLI.new().parse! ARGV
 
-server = Inventory::Server::Server.new(options)
-server.start
+server = Inventory::Server::Server.new(cli_options)
+options = server.config
+
+Filum.logger.info "SMTP Server started, listening on #{options[:host]}:#{options[:smtp_port]}"
+
+smtp_server = Inventory::Server::SMTPServer.new(options, server.middleware)
+smtp_server.start
+smtp_server.join
 
 BEGIN {
   at_exit {
-    server.stop if server
+    if smtp_server
+      Filum.logger.info "Server is shutting down gracefully"
+      smtp_server.shutdown()
+
+      unless smtp_server.connections == 0
+        Filum.logger.info "Still #{smtp_server.connections} connections, wait 1 seconds"
+        sleep 1
+      end
+
+      smtp_server.stop
+    end
   }
 }

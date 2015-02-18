@@ -12,6 +12,7 @@ module Inventory
       def initialize(config, middleware)
         @config = config
         @middleware = middleware
+        @audit = @config[:debug]
         super(config[:smtp_port], config[:host], config[:max_connections])
       end
 
