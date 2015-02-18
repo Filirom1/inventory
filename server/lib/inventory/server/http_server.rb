@@ -13,6 +13,8 @@ module Inventory
         end
 
         use Rack::CommonLogger, rack_logger
+
+        Rack::Utils.key_space_limit = 262144 
       end
 
       post "/api/v1/facts/:id" do
