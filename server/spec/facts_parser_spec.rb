@@ -10,7 +10,7 @@ RSpec.describe Inventory::Server::FactsParser, '#call' do
     env = { :body => nil }
     it "should throw an error" do
       expect {
-        Inventory::Server::FactsParser.new(noop).call(env)
+        Inventory::Server::FactsParser.new(noop, {}).call(env)
       }.to raise_error 'body missing'
     end
   end
@@ -19,7 +19,7 @@ RSpec.describe Inventory::Server::FactsParser, '#call' do
     env = { :body => 'blablayuqsd' }
     it "should throw an error" do
       expect {
-        Inventory::Server::FactsParser.new(noop).call(env)
+        Inventory::Server::FactsParser.new(noop, {}).call(env)
       }.to raise_error 'bad format'
     end
   end
@@ -28,7 +28,7 @@ RSpec.describe Inventory::Server::FactsParser, '#call' do
     env = { :body => '{toto:12}' }
     it "should throw an error" do
       expect {
-        Inventory::Server::FactsParser.new(noop).call(env)
+        Inventory::Server::FactsParser.new(noop, {}).call(env)
       }.to raise_error JSON::ParserError
     end
   end
@@ -36,7 +36,7 @@ RSpec.describe Inventory::Server::FactsParser, '#call' do
   context "with good JSON" do
     env = { :body => '{"key":"value"}' }
     it "should throw an error" do
-      Inventory::Server::FactsParser.new(noop).call(env)
+      Inventory::Server::FactsParser.new(noop, {}).call(env)
       expect(env[:facts]).to eq 'key' => 'value'
     end
   end
@@ -47,7 +47,7 @@ RSpec.describe Inventory::Server::FactsParser, '#call' do
             toto''' }
     it "should throw an error" do
       expect {
-        Inventory::Server::FactsParser.new(noop).call(env)
+        Inventory::Server::FactsParser.new(noop, {}).call(env)
       }.to raise_error Psych::SyntaxError
     end
   end
@@ -56,7 +56,7 @@ RSpec.describe Inventory::Server::FactsParser, '#call' do
     env = { :body => '''---
             key: value''' }
     it "should throw an error" do
-      Inventory::Server::FactsParser.new(noop).call(env)
+      Inventory::Server::FactsParser.new(noop, {}).call(env)
       expect(env[:facts]).to eq 'key' => 'value'
     end
   end
@@ -65,7 +65,7 @@ RSpec.describe Inventory::Server::FactsParser, '#call' do
     env = { :body => '''<Inventory>blabla</Intory>''' }
     it "should throw an error" do
       expect {
-        Inventory::Server::FactsParser.new(noop).call(env)
+        Inventory::Server::FactsParser.new(noop, {}).call(env)
       }.to raise_error REXML::ParseException
     end
   end
@@ -76,7 +76,7 @@ RSpec.describe Inventory::Server::FactsParser, '#call' do
               <key>value</key>
             </inventory>''' }
     it "should throw an error" do
-      Inventory::Server::FactsParser.new(noop).call(env)
+      Inventory::Server::FactsParser.new(noop, {}).call(env)
       expect(env[:facts]).to eq 'key' => 'value'
     end
   end
@@ -90,7 +90,7 @@ RSpec.describe Inventory::Server::FactsParser, '#call' do
               </obj>
             </inventory>''' }
     it "should throw an error" do
-      Inventory::Server::FactsParser.new(noop).call(env)
+      Inventory::Server::FactsParser.new(noop, {}).call(env)
       expect(env[:facts]).to eq({ 'key' =>'value', 'obj' => { 'key' => 'value' } })
     end
   end

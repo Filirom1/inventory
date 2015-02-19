@@ -11,14 +11,15 @@ module Inventory
       attr_reader :config, :middlewares
 
       def initialize(cli_config)
-        @config = Config.new(cli_config)
+        config = Config.generate(cli_config)
+        @config = config
 
-        Filum.setup(@config[:logger])
-        Filum.logger.level = @config[:log_level]
+        Filum.setup(config[:logger])
+        Filum.logger.level = config[:log_level]
 
         @middlewares = Middleware::Builder.new do
-          use FactsParser
-          use Index
+          use FactsParser, config
+          use Index, config
           #use WebHooks
         end
       end

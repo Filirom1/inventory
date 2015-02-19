@@ -31,6 +31,8 @@ module Inventory
       end
 
       error 400..500 do
+        Filum.logger.error env['sinatra.error']
+        Filum.logger.error env['sinatra.error'].backtrace
         {:id => env[:id], :ok => false, :status => status, :message => env['sinatra.error']}.to_json
       end
     end

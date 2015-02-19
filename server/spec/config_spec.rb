@@ -7,7 +7,7 @@ Filum.setup '/dev/null'
 RSpec.describe Inventory::Server::Config do
   context "without configuration" do
     it "should should use default configuration" do
-      config = Inventory::Server::Config.new({})
+      config = Inventory::Server::Config.generate({})
       expect(config[:smtp_port]).to eq 2525
     end
   end
@@ -31,33 +31,33 @@ RSpec.describe Inventory::Server::Config do
     end
 
     it "should use the ENV configuration" do
-      config = Inventory::Server::Config.new({})
+      config = Inventory::Server::Config.generate({})
       expect(config[:host]).to eq '127.0.0.1'
     end
 
     it "should should cast integer" do
-      config = Inventory::Server::Config.new({})
+      config = Inventory::Server::Config.generate({})
       expect(config[:smtp_port]).to eq 2626
     end
 
     it "should should cast boolean" do
-      config = Inventory::Server::Config.new({})
+      config = Inventory::Server::Config.generate({})
       expect(config[:debug]).to eq false
     end
 
     it "should should cast stdout/stderr" do
-      config = Inventory::Server::Config.new({})
+      config = Inventory::Server::Config.generate({})
       expect(config[:logger]).to eq $stdout
     end
 
     it "should should cast DEBUG/INFO/WARN/ERROR/FATAL" do
-      config = Inventory::Server::Config.new({})
+      config = Inventory::Server::Config.generate({})
       expect(config[:log_level]).to eq Logger::DEBUG
     end
 
     context "with CLI configuration" do
       it "should use the CLI configuration" do
-        config = Inventory::Server::Config.new({:smtp_port => 25})
+        config = Inventory::Server::Config.generate({:smtp_port => 25})
         expect(config[:smtp_port]).to eq 25
       end
     end

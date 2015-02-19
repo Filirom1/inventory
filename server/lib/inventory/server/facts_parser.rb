@@ -5,8 +5,9 @@ require 'yaml'
 module Inventory
   module Server
     class FactsParser
-      def initialize(app)
+      def initialize(app, config)
         @app = app
+        @config = config
       end
 
       def call(env)

@@ -13,14 +13,15 @@ RestClient.log =
 module Inventory
   module Server
     class Index
-      def initialize(app)
+      def initialize(app, config)
         @app = app
+        @config = config
       end
 
       def call(env)
         Filum.logger.info "Index"
 
-        es_host = env[:config][:es_host] || "http://localhost:9200/"
+        es_host = @config[:es_host] || "http://localhost:9200/"
 
         # Index it into elasticsearch
         id = env[:id]

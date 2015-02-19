@@ -24,7 +24,7 @@ module Inventory
           @middlewares.call(:id => id, :body => body)
         rescue => e
           Filum.logger.error $!
-          Filum.logger.error "#{e.backtrace.join("\n\t")}"
+          Filum.logger.error "#{e.backtrace}"
 
           # dot not raise the error to avoid the SMTP server relay to defer malformed emails
         end
