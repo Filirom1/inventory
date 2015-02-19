@@ -82,7 +82,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 1.7)
+  bundler
   codeclimate-test-reporter
   inventory-server!
   rack-test
