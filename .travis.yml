@@ -4,3 +4,7 @@ rvm:
   - 2.0.0
 gemfile: server/Gemfile
 script: cd server && bundle exec rspec spec
+
+addons:
+  code_climate:
+    repo_token: a1cef56082836d79578a4a84c6da43c7f5854faa03bedd888f795c62ceb2eb84
