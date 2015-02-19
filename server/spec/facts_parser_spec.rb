@@ -94,4 +94,32 @@ RSpec.describe Inventory::Server::FactsParser, '#call' do
       expect(env[:facts]).to eq({ 'key' =>'value', 'obj' => { 'key' => 'value' } })
     end
   end
+
+  context "with XML base64 containing UTF-8 encodings" do
+    env = { :body => '''
+            <inventory>
+              <key>value</key>
+              <obj>
+                <key>__base64__aMOpaMOp</key>
+              </obj>
+            </inventory>''' }
+    it "should throw an error" do
+      Inventory::Server::FactsParser.new(noop, {}).call(env)
+      expect(env[:facts]).to eq({ 'key' =>'value', 'obj' => { 'key' => 'héhé' } })
+    end
+  end
+
+  context "with XML base64 containing ISO-8859-1 encodings" do
+    env = { :body => '''
+            <inventory>
+              <key>value</key>
+              <obj>
+                <key>__base64__aOlo6Q==</key>
+              </obj>
+            </inventory>''' }
+    it "should throw an error" do
+      Inventory::Server::FactsParser.new(noop, {}).call(env)
+      expect(env[:facts]).to eq({ 'key' =>'value', 'obj' => { 'key' => 'h?h?' } })
+    end
+  end
 end
