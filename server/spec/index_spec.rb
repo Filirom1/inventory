@@ -10,7 +10,7 @@ noop = lambda {|env|}
 ES_HOST = 'http://localhost:9200'
 config = { :es_host => ES_HOST }  
 
-RSpec.describe Inventory::Server::EmailParser, '#call' do
+RSpec.describe Inventory::Server::Index, '#call' do
   context "without id" do
     env = {:facts => { :key => 'value' }}
     it "should throw an error" do
