@@ -1,5 +1,6 @@
 require 'filum'
 require 'app_configuration'
+require 'fileutils'
 
 module Inventory
   module Server
@@ -12,7 +13,7 @@ module Inventory
         :max_connections => 4,
         :debug => false,
         :es_host => 'http://localhost:9200',
-        :failed_facts_dirs => '/var/log/inventory/failures/',
+        :failed_facts_dir => '/var/log/inventory/failures/',
         :logger => 'stdout',
         :log_level => 'INFO'
       }
@@ -61,6 +62,11 @@ module Inventory
           end
           config[sym] = result
         }
+
+        puts config[:failed_facts_dir]
+
+        FileUtils.mkdir_p config[:failed_facts_dir]
+
         config
       end
     end

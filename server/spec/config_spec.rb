@@ -5,6 +5,10 @@ require "filum"
 Filum.setup '/dev/null'
 
 RSpec.describe Inventory::Server::Config do
+  before do
+    ENV['INVENTORY_FAILED_FACTS_DIR'] = "./log/"
+  end
+
   context "without configuration" do
     it "should should use default configuration" do
       config = Inventory::Server::Config.generate({})

@@ -1,13 +1,9 @@
-require 'fileutils'
-
 module Inventory
   module Server
     class LogFailuresOnDisk
       def initialize(app, config)
         @app = app
-        @failed_facts_dir = config[:failed_facts_dirs]
-
-        FileUtils.mkdir_p @failed_facts_dir
+        @failed_facts_dir = config[:failed_facts_dir]
       end
 
       def call(env)
