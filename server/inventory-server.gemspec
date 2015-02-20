@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'app_configuration'
   spec.add_dependency 'sinatra'
   spec.add_dependency 'thin'
+  spec.add_dependency 'ensure-encoding'
 
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake", "~> 10.0"

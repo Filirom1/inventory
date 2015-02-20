@@ -106,7 +106,7 @@ RSpec.describe Inventory::Server::FactsParser, '#call' do
             </inventory>''' }
     it "should parse it" do
       Inventory::Server::FactsParser.new(noop, {}).call(env)
-      expect(env[:facts]).to eq({ 'key' =>'value', 'obj' => { 'key' => 'héhé' } })
+      expect(env[:facts]).to eq({ 'key' =>'value', 'obj' => { 'key' => "h\xc3\xa9h\xc3\xa9" } })
     end
   end
 
@@ -118,9 +118,22 @@ RSpec.describe Inventory::Server::FactsParser, '#call' do
                 <key>__base64__aOlo6Q==</key>
               </obj>
             </inventory>''' }
-    xit "should remove bad encoding" do
+    it "should parse it" do
       Inventory::Server::FactsParser.new(noop, {}).call(env)
-      expect(env[:facts]).to eq({ 'key' =>'value', 'obj' => { 'key' => 'h?h?' } })
+      expect(env[:facts]).to eq({ 'key' =>'value', 'obj' => { 'key' => "h\xc3\xa9h\xc3\xa9" } })
+    end
+  end
+
+  context "with XML base64 containing Japonese encodings" do
+    env = { :body => '''
+            <inventory>
+              <key>value</key>
+              <obj>
+                <key>__base64__grGC8YLJgr+CzQ==</key>
+              </obj>
+            </inventory>''' }
+    it "should not throw an error" do
+      Inventory::Server::FactsParser.new(noop, {}).call(env)
     end
   end
 end

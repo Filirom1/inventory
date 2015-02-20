@@ -1,6 +1,8 @@
+# encoding: utf-8
 require 'json'
 require 'crack'
 require 'yaml'
+require 'ensure/encoding'
 
 module Inventory
   module Server
@@ -64,7 +66,10 @@ module Inventory
       end
 
       def fix_bad_encoding(str)
-        str.force_encoding('UTF-8').encode!( 'UTF-8', invalid: :replace, undef: :replace, replace: '?' )
+        str.ensure_encoding('UTF-8',
+          :external_encoding  => [Encoding::UTF_8, Encoding::ISO_8859_1],
+          :invalid_characters => :transcode
+        )
       end
     end
   end
