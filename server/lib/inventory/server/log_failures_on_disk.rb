@@ -8,7 +8,11 @@ module Inventory
 
       def call(env)
         id = env[:id]
+        raise 'id missing' if id.nil? || id.empty?
+
         body = env[:body]
+        raise "body missing" if body.nil? || body.empty?
+
         begin
           @app.call(env)
         rescue => e

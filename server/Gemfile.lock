@@ -90,4 +90,5 @@ DEPENDENCIES
   rack-test
   rake (~> 10.0)
   rspec (~> 3.0)
+  rspec-mocks
   webmock (~> 1.20)

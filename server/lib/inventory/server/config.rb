@@ -63,8 +63,6 @@ module Inventory
           config[sym] = result
         }
 
-        puts config[:failed_facts_dir]
-
         FileUtils.mkdir_p config[:failed_facts_dir]
 
         config
