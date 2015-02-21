@@ -7,8 +7,7 @@ Filum.setup '/dev/null'
 
 noop = lambda {|env|}
 
-ES_HOST = 'http://localhost:9200'
-config = { :es_host => ES_HOST }  
+config = Inventory::Server::Config::DEFAULTS
 
 RSpec.describe Inventory::Server::Index, '#call' do
   # needed for code climates to work after rspec
@@ -41,7 +40,7 @@ RSpec.describe Inventory::Server::Index, '#call' do
     env = {:id => 'MY_UUID', :facts => { :key => 'value' } }
 
     it "should throw an error" do
-      stub_request(:put, "#{ES_HOST}/facts/1.0.0/MY_UUID").to_return(:status => [500, "Internal Server Error"], :body => '{"OK": false}')
+      stub_request(:put, "#{config[:es_host]}/facts/1.0.0/MY_UUID").to_return(:status => [500, "Internal Server Error"], :body => '{"OK": false}')
 
       expect {
         Inventory::Server::Index.new(noop, config).call(env)
@@ -50,10 +49,18 @@ RSpec.describe Inventory::Server::Index, '#call' do
   end
 
   context "with an ElasticSearch Server" do
-    env = {:id => 'MY_UUID', :facts => { :key => 'value' } }
-
     it "should call ElasticSearch" do
-      stub = stub_request(:put, "#{ES_HOST}/facts/1.0.0/MY_UUID").to_return(:body => '{"OK": true}')
+      env = {:id => 'MY_UUID', :facts => { :key => 'value' } }
+      stub = stub_request(:put, "#{config[:es_host]}/facts/1.0.0/MY_UUID").to_return(:body => '{"OK": true}')
+
+      Inventory::Server::Index.new(noop, config).call(env)
+
+      expect(stub).to have_been_requested
+    end
+
+    it "should change url depending on the type and version" do
+      env = {:id => 'MY_UUID', :facts => { 'key' => 'value', 'type' => 'my_type', 'version' => 'my_version' } }
+      stub = stub_request(:put, "#{config[:es_host]}/my_type/my_version/MY_UUID").to_return(:body => '{"OK": true}')
 
       Inventory::Server::Index.new(noop, config).call(env)
 

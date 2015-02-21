@@ -16,8 +16,10 @@ module Inventory
         :failed_facts_dir => '/var/log/inventory/failures/',
         :logger => 'stdout',
         :log_level => 'INFO',
-        :type_key => 'facts',
-        :version_key => 'version'
+        :type_key => 'type',
+        :type_default => 'facts',
+        :version_key => 'version',
+        :version_default => '1.0.0'
       }
 
       def self.generate(cli_config)
