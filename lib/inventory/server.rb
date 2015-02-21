@@ -4,6 +4,7 @@ require "inventory/server/version"
 require "inventory/server/config"
 require "inventory/server/log_failures_on_disk"
 require "inventory/server/facts_parser"
+require "inventory/server/json_schema_validator"
 require "inventory/server/index"
 
 module Inventory
@@ -21,6 +22,7 @@ module Inventory
         @middlewares = Middleware::Builder.new do
           use LogFailuresOnDisk, config
           use FactsParser, config
+          use JSONSchemaValidator, config
           use Index, config
           #use WebHooks
         end

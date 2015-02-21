@@ -28,8 +28,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'middleware'
   spec.add_dependency 'app_configuration'
   spec.add_dependency 'sinatra'
-  spec.add_dependency 'thin'
   spec.add_dependency 'ensure-encoding'
+  spec.add_dependency 'json-schema'
 
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake", "~> 10.0"
@@ -38,4 +38,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "rspec-mocks"
   spec.add_development_dependency "webmock", "~> 1.20"
+  spec.add_development_dependency 'thin'
 end
