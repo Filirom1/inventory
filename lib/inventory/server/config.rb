@@ -15,7 +15,9 @@ module Inventory
         :es_host => 'http://localhost:9200',
         :failed_facts_dir => '/var/log/inventory/failures/',
         :logger => 'stdout',
-        :log_level => 'INFO'
+        :log_level => 'INFO',
+        :type_key => 'facts',
+        :version_key => 'version'
       }
 
       def self.generate(cli_config)

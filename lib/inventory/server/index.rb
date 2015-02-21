@@ -29,8 +29,8 @@ module Inventory
         raise 'id is missing' if id.nil? || id.empty?
         raise 'facts is missing' if facts.nil? || facts.empty?
 
-        type = facts['type'] || 'server'
-        version = facts['version'] || '1.0.0'
+        type = facts[@config[:type_key]] || 'facts'
+        version = facts[@config[:version_key]] || '1.0.0'
         begin
           response = RestClient.put("#{es_host}/#{type}/#{version}/#{id}", facts.to_json)
           Filum.logger.info response
