@@ -39,7 +39,7 @@ module Inventory
         case format
         when :xml
           hash = Crack::XML.parse(str)
-          xml = decode_base64(nil, hash)
+          xml = decode_base64(hash)
           keys = xml.keys
           if keys.length == 1
             return xml[keys[0]] 
@@ -53,16 +53,22 @@ module Inventory
         end
       end
 
-      # decode base64 if present in hash values
-      def decode_base64(parent, myHash)
-        myHash.each {|key, value|
-          if value.is_a?(Hash)
-            decode_base64(key, value)
-          elsif value.is_a? String and value.include? "__base64__"
-            value.slice!("__base64__")
-            myHash[key] = fix_bad_encoding Base64.decode64(value);
-          end
-        }
+      # decode base64 if present in this deep structure
+      def decode_base64(something)
+        if something.is_a?(Hash)
+          something.each {|key, value|
+            something[key] = decode_base64(value)
+          }
+        elsif something.is_a?(Array)
+          something = something.map {|value|
+            decode_base64(value)
+          }
+        elsif something.is_a?(String) and something.include? "__base64__"
+          something.slice!("__base64__")
+          fix_bad_encoding Base64.decode64(something);
+        else
+          something
+        end
       end
 
       def fix_bad_encoding(str)

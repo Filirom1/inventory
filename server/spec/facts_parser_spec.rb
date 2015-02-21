@@ -82,7 +82,7 @@ RSpec.describe Inventory::Server::FactsParser, '#call' do
     end
   end
 
-  context "with good XML with base64" do
+  context "with good XML with base64 in object" do
     env = { :body => '''
             <inventory>
               <key>value</key>
@@ -93,6 +93,21 @@ RSpec.describe Inventory::Server::FactsParser, '#call' do
     it "should parse it" do
       Inventory::Server::FactsParser.new(noop, {}).call(env)
       expect(env[:facts]).to eq({ 'key' =>'value', 'obj' => { 'key' => 'value' } })
+    end
+  end
+
+  context "with good XML with base64 in array" do
+    env = { :body => '''
+            <inventory>
+              <key>value</key>
+              <array>
+                <value>__base64__dmFsdWU=</value>
+                <value>__base64__dmFsdWU=</value>
+              </array>
+            </inventory>''' }
+    it "should parse it" do
+      Inventory::Server::FactsParser.new(noop, {}).call(env)
+      expect(env[:facts]).to eq({ 'key' =>'value', 'array' => { 'value' => ['value', 'value']}})
     end
   end
 
