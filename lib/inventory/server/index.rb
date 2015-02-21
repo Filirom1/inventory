@@ -21,8 +21,6 @@ module Inventory
       def call(env)
         Filum.logger.info "Index"
 
-        es_host = @config[:es_host] || "http://localhost:9200/"
-
         # Index it into elasticsearch
         id = env[:id]
         facts = env[:facts]
@@ -31,8 +29,9 @@ module Inventory
 
         type = facts[@config[:type_key]] || @config[:type_default]
         version = facts[@config[:version_key]] || @config[:version_default]
+
         begin
-          response = RestClient.put("#{es_host}/#{type}/#{version}/#{id}", facts.to_json)
+          response = RestClient.put("#{@config[:es_host]}/#{type}/#{version}/#{id}", facts.to_json)
           Filum.logger.info response
         rescue => e
           if e.respond_to?(:response)
