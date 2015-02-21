@@ -11,6 +11,14 @@ ES_HOST = 'http://localhost:9200'
 config = { :es_host => ES_HOST }  
 
 RSpec.describe Inventory::Server::Index, '#call' do
+  # needed for code climates to work after rspec
+  before(:all) do
+    WebMock.disable_net_connect!
+  end
+  after(:all) do
+    WebMock.allow_net_connect!
+  end
+
   context "without id" do
     env = {:facts => { :key => 'value' }}
     it "should throw an error" do
