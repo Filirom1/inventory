@@ -3,7 +3,7 @@ require 'json-schema'
 
 module Inventory
   module Server
-    class JSONSchemaValidator
+    class JsonSchemaValidator
       def initialize(app, config)
         @app = app
         @config = config

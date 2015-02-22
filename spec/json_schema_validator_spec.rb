@@ -9,7 +9,7 @@ noop = lambda {|env|}
 
 config = Inventory::Server::Config::DEFAULTS
 
-RSpec.describe Inventory::Server::JSONSchemaValidator, '#call' do
+RSpec.describe Inventory::Server::JsonSchemaValidator, '#call' do
 
   before(:each) do
     JSON::Validator.clear_cache
@@ -18,7 +18,7 @@ RSpec.describe Inventory::Server::JSONSchemaValidator, '#call' do
   context "without facts" do
     it "should throw an error" do
       expect {
-        Inventory::Server::JSONSchemaValidator.new(noop, config).call({})
+        Inventory::Server::JsonSchemaValidator.new(noop, config).call({})
       }.to raise_error 'facts is missing'
     end
   end
@@ -27,7 +27,7 @@ RSpec.describe Inventory::Server::JSONSchemaValidator, '#call' do
     env = { :facts => { 'key' => 'value'} }
     it "should use the default config" do
       expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/facts/1.0.0.json").and_return false
-      Inventory::Server::JSONSchemaValidator.new(noop, config).call(env)
+      Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
     end
   end
 
@@ -36,7 +36,7 @@ RSpec.describe Inventory::Server::JSONSchemaValidator, '#call' do
 
     context "without JSON schema" do
       it "should pass" do
-        Inventory::Server::JSONSchemaValidator.new(noop, config).call(env)
+        Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
       end
     end
 
@@ -44,7 +44,7 @@ RSpec.describe Inventory::Server::JSONSchemaValidator, '#call' do
       it "should fail if the file is not redable" do
         expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return true
         expect {
-          Inventory::Server::JSONSchemaValidator.new(noop, config).call(env)
+          Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
         }.to raise_error Errno::ENOENT
       end
 
@@ -52,7 +52,7 @@ RSpec.describe Inventory::Server::JSONSchemaValidator, '#call' do
         expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return true
         expect(File).to receive(:read).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return '{"dsf": dsf}'
         expect {
-          Inventory::Server::JSONSchemaValidator.new(noop, config).call(env)
+          Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
         }.to raise_error MultiJson::ParseError
       end
 
@@ -66,7 +66,7 @@ RSpec.describe Inventory::Server::JSONSchemaValidator, '#call' do
         expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return true
         expect(File).to receive(:read).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return schema.to_json
         expect {
-          Inventory::Server::JSONSchemaValidator.new(noop, config).call(env)
+          Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
         }.to raise_error JSON::Schema::ValidationError
       end
 
@@ -80,7 +80,7 @@ RSpec.describe Inventory::Server::JSONSchemaValidator, '#call' do
         expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return true
         expect(File).to receive(:read).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return schema.to_json
 
-        Inventory::Server::JSONSchemaValidator.new(noop, config).call(env)
+        Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
       end
 
       it "should pass if the facts contains more attributes than the JSON Schema " do
@@ -92,7 +92,7 @@ RSpec.describe Inventory::Server::JSONSchemaValidator, '#call' do
         expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return true
         expect(File).to receive(:read).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return schema.to_json
 
-        Inventory::Server::JSONSchemaValidator.new(noop, config).call(env)
+        Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
       end
 
       it "should pass if optional fields are not present " do
@@ -105,7 +105,7 @@ RSpec.describe Inventory::Server::JSONSchemaValidator, '#call' do
         expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return true
         expect(File).to receive(:read).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return schema.to_json
 
-        Inventory::Server::JSONSchemaValidator.new(noop, config).call(env)
+        Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
       end
 
       it "should fail if mandatory fields are not present " do
@@ -120,7 +120,7 @@ RSpec.describe Inventory::Server::JSONSchemaValidator, '#call' do
         expect(File).to receive(:read).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return schema.to_json
 
         expect {
-          Inventory::Server::JSONSchemaValidator.new(noop, config).call(env)
+          Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
         }.to raise_error JSON::Schema::ValidationError
       end
     end

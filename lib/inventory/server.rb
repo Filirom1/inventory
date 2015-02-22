@@ -1,11 +1,8 @@
 require 'filum'
 require 'middleware'
 require "inventory/server/version"
+require "inventory/server/loader"
 require "inventory/server/config"
-require "inventory/server/log_failures_on_disk"
-require "inventory/server/facts_parser"
-require "inventory/server/json_schema_validator"
-require "inventory/server/index"
 
 module Inventory
   module Server
@@ -19,12 +16,13 @@ module Inventory
         Filum.setup(config[:logger])
         Filum.logger.level = config[:log_level]
 
+        # Dynamically load plugins from plugins_path
+        plugin_names = config[:plugins].split(',')
         @middlewares = Middleware::Builder.new do
-          use LogFailuresOnDisk, config
-          use FactsParser, config
-          use JSONSchemaValidator, config
-          use Index, config
-          #use WebHooks
+          plugins = Loader.new(config).load_plugins(*plugin_names)
+          plugins.each {|klass|
+            use klass, config
+          }
         end
       end
     end
