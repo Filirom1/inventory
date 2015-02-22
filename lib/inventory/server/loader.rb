@@ -45,7 +45,7 @@ module Inventory
       # Usefull for tests
       def kernel_load(file)
         Filum.logger.info "Load #{file}"
-        Kernel.load(file)
+        require file
       end
 
       # transform a snake case string into a upper camel case string
