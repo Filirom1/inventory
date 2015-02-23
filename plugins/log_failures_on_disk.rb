@@ -26,6 +26,8 @@ module Inventory
 
           File.write(filepath, body)
           File.write("#{filepath}.log", "#{e}\n#{e.backtrace.join('\n')}")
+
+          raise e
         end
       end
     end
