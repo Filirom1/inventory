@@ -1,10 +1,7 @@
 require_relative '../plugins/log_failures_on_disk'
-require "filum"
 require 'rspec/mocks'
 
 noop = lambda {|env|}
-
-Filum.setup '/dev/null'
 
 RSpec.describe Inventory::Server::LogFailuresOnDisk do
   config = { :failed_facts_dir => './log' }

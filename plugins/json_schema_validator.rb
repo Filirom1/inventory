@@ -1,6 +1,6 @@
-require 'filum'
 require 'json-schema'
 require 'inventory/server/inventory_error'
+require "inventory/server/logger"
 
 module Inventory
   module Server
@@ -11,7 +11,7 @@ module Inventory
       end
 
       def call(env)
-        Filum.logger.info "JSON Schema Validator"
+        InventoryLogger.logger.info "JSON Schema Validator"
         facts = env[:facts]
         raise InventoryError.new 'facts is missing' if facts.nil? || facts.empty?
 
@@ -21,11 +21,11 @@ module Inventory
         json_schema_file = File.join @config[:json_schema_dir], type, "#{version}.json"
 
         if ! File.file? json_schema_file
-          Filum.logger.info "No JSON Schema found at #{json_schema_file}, skip validation"
+          InventoryLogger.logger.info "No JSON Schema found at #{json_schema_file}, skip validation"
           return @app.call(env)
         end
 
-        Filum.logger.info "Use JSON Schema #{json_schema_file}"
+        InventoryLogger.logger.info "Use JSON Schema #{json_schema_file}"
         JSON::Validator.validate!(json_schema_file, facts)
       end
     end

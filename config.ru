@@ -1,4 +1,3 @@
-require 'filum'
 require 'inventory/server'
 require 'inventory/server/http_server'
 

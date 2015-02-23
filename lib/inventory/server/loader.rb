@@ -1,5 +1,5 @@
-require 'filum'
 require 'inventory/server/inventory_error'
+require 'inventory/server/logger'
 
 PLUGINS_DIR = Pathname.new(File.join File.dirname(__FILE__), '..', '..', '..', 'plugins').cleanpath
 
@@ -41,13 +41,13 @@ module Inventory
           kernel_load(file)
         rescue => e
           @loaded.delete(file)
-          Filum.logger.error("Fail to load #{file}: #{e}")
+          InventoryLogger.logger.error("Fail to load #{file}: #{e}")
         end
       end
 
       # Usefull for tests
       def kernel_load(file)
-        Filum.logger.info "Load #{file}"
+        InventoryLogger.logger.info "Load #{file}"
         require file
       end
 

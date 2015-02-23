@@ -1,12 +1,12 @@
 require "mail"
-require "filum"
 require 'inventory/server/inventory_error'
+require "inventory/server/logger"
 
 module Inventory
   module Server
     class EmailParser
       def self.parse(message)
-        Filum.logger.info "Email parser"
+        InventoryLogger.logger.info "Email parser"
 
         # Parse the email
         email = Mail.read_from_string(message)

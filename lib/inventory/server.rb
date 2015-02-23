@@ -1,8 +1,8 @@
-require 'filum'
 require 'middleware'
 require "inventory/server/version"
 require "inventory/server/loader"
 require "inventory/server/config"
+require "inventory/server/logger"
 
 module Inventory
   module Server
@@ -13,8 +13,8 @@ module Inventory
         config = Config.generate(cli_config)
         @config = config
 
-        Filum.setup(config[:logger])
-        Filum.logger.level = config[:log_level]
+        InventoryLogger.setup(config[:logger])
+        InventoryLogger.logger.level = config[:log_level]
 
         # Dynamically load plugins from plugins_path
         plugin_names = config[:plugins].split(',')

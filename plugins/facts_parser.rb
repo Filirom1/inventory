@@ -4,6 +4,7 @@ require 'crack'
 require 'yaml'
 require 'ensure/encoding'
 require 'inventory/server/inventory_error'
+require "inventory/server/logger"
 
 module Inventory
   module Server
@@ -14,7 +15,7 @@ module Inventory
       end
 
       def call(env)
-        Filum.logger.info "Facts parser"
+        InventoryLogger.logger.info "Facts parser"
         body = env[:body]
         raise InventoryError.new "body missing" if body.nil? || body.empty?
 

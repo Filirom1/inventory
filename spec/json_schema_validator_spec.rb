@@ -1,9 +1,6 @@
 require_relative '../plugins/json_schema_validator'
 
-require "filum"
 require 'rspec/mocks'
-
-Filum.setup '/dev/null'
 
 noop = lambda {|env|}
 

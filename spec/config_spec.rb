@@ -1,9 +1,5 @@
 require 'inventory/server/config'
 
-require "filum"
-
-Filum.setup '/dev/null'
-
 RSpec.describe Inventory::Server::Config do
   before do
     ENV['INVENTORY_FAILED_FACTS_DIR'] = "./log/"

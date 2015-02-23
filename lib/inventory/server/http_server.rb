@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'json'
 require 'inventory/server/inventory_error'
+require "inventory/server/logger"
 
 module Inventory
   module Server
@@ -9,7 +10,7 @@ module Inventory
       configure do
         rack_logger = Object.new.tap do |proxy|
           def proxy.<<(message)
-            Filum.logger.info message
+            InventoryLogger.logger.info message
           end
         end
 
@@ -25,7 +26,7 @@ module Inventory
         content_type :json
         id= params[:id]
         env[:id] = id
-        Filum.logger.context_id = id
+        InventoryLogger.logger.context_id = id
 
         settings.middlewares.call(:id => id, :body => request.body.read, :config => settings.config)
         {:id => id, :ok => true, :status => 200}.to_json

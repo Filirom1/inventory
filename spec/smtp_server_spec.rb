@@ -1,10 +1,7 @@
 require 'inventory/server/smtp_server'
 
 require 'mail'
-require "filum"
 require "middleware"
-
-Filum.setup '/dev/null'
 
 PORT=2526
 HOST="127.0.0.1"

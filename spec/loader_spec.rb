@@ -1,9 +1,5 @@
 require 'inventory/server/loader'
 
-require "filum"
-
-Filum.setup '/dev/null'
-
 RSpec.describe Inventory::Server::Loader do
 
   context "without plugin_path" do

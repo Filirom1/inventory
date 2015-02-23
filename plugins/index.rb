@@ -1,13 +1,13 @@
 require 'rest-client'
 require 'json'
-require 'filum'
 require 'inventory/server/inventory_error'
+require "inventory/server/logger"
 
-# Forward RestClient logs to Filum
+# Forward RestClient logs to InventoryLogger
 RestClient.log =
   Object.new.tap do |proxy|
     def proxy.<<(message)
-      Filum.logger.debug message
+      Inventory::Server::InventoryLogger.logger.debug message
     end
   end
 
@@ -20,7 +20,7 @@ module Inventory
       end
 
       def call(env)
-        Filum.logger.info "Index"
+        InventoryLogger.logger.info "Index"
 
         # Index it into elasticsearch
         id = env[:id]
@@ -33,7 +33,7 @@ module Inventory
 
         begin
           response = RestClient.put("#{@config[:es_host]}/#{type}/#{version}/#{id}", facts.to_json)
-          Filum.logger.info response
+          InventoryLogger.logger.info response
         rescue => e
           if e.respond_to?(:response)
             raise InventoryError.new "#{e}: #{e.response}"

@@ -1,9 +1,6 @@
 require 'inventory/server/email_parser'
 
 require 'mail'
-require "filum"
-
-Filum.setup '/dev/null'
 
 RSpec.describe Inventory::Server::EmailParser, '#call' do
 

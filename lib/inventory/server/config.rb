@@ -1,6 +1,6 @@
-require 'filum'
 require 'app_configuration'
 require 'fileutils'
+require "inventory/server/logger"
 
 module Inventory
   module Server

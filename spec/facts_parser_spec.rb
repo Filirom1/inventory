@@ -1,9 +1,6 @@
 # encoding: utf-8
 require_relative '../plugins/facts_parser'
 
-require "filum"
-
-Filum.setup '/dev/null'
 noop = lambda {|env|}
 
 RSpec.describe Inventory::Server::FactsParser, '#call' do

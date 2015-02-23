@@ -1,4 +1,5 @@
 require 'inventory/server/inventory_error'
+require "inventory/server/logger"
 
 module Inventory
   module Server
@@ -19,9 +20,9 @@ module Inventory
           @app.call(env)
         rescue => e
           filepath = "#{@failed_facts_dir}/#{id}"
-          Filum.logger.error $!
-          Filum.logger.error "Failed facts stored on #{filepath}"
-          Filum.logger.error "#{e.backtrace}"
+          InventoryLogger.logger.error $!
+          InventoryLogger.logger.error "Failed facts stored on #{filepath}"
+          InventoryLogger.logger.error "#{e.backtrace}"
 
           File.write(filepath, body)
         end

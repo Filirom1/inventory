@@ -1,9 +1,6 @@
 require_relative '../plugins/index'
 
-require "filum"
 require 'webmock/rspec'
-
-Filum.setup '/dev/null'
 
 noop = lambda {|env|}
 

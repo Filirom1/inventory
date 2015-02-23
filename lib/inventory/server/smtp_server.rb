@@ -1,8 +1,8 @@
 require "rubygems"
 require "midi-smtp-server"
-require 'filum'
 require "inventory/server/email_parser"
 require 'inventory/server/inventory_error'
+require "inventory/server/logger"
 
 module Inventory
   module Server
@@ -21,7 +21,7 @@ module Inventory
         begin 
           # execute middlewares
           id, body = EmailParser.parse(ctx[:message])
-          Filum.logger.context_id = id
+          InventoryLogger.logger.context_id = id
           @middlewares.call(:id => id, :body => body)
         rescue => e
           # dot not raise the error to avoid the SMTP server relay to defer malformed emails
@@ -29,7 +29,7 @@ module Inventory
       end
 
       def log(msg)
-        Filum.logger.debug msg
+        InventoryLogger.logger.debug msg
       end
     end
   end
