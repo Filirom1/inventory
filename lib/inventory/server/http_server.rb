@@ -28,6 +28,7 @@ module Inventory
         env[:id] = id
         InventoryLogger.logger.context_id = id
 
+        request.body.rewind
         settings.middlewares.call(:id => id, :body => request.body.read, :config => settings.config)
         {:id => id, :ok => true, :status => 200}.to_json
       end
