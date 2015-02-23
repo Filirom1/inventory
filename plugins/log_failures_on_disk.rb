@@ -21,11 +21,11 @@ module Inventory
         rescue => e
           filepath = "#{@failed_facts_dir}/#{id}"
           InventoryLogger.logger.error $!
-          InventoryLogger.logger.error "Failed facts stored on #{filepath}"
           InventoryLogger.logger.error "#{e.backtrace}"
+          InventoryLogger.logger.error "Failed facts stored on #{filepath}"
 
           File.write(filepath, body)
-          File.write("#{filepath}.log", "#{e}\n#{e.backtrace.join('\n')}")
+          File.write("#{filepath}.log", "#{e}\n\n#{e.backtrace.join("\n")}\n\n#{env.to_yaml}")
 
           raise e
         end
