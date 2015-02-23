@@ -1,12 +1,8 @@
+require 'sinatra'
 require 'inventory/server'
 require 'inventory/server/http_server'
 
-module Inventory
-  module Server
-    server = Server.new({})
-    HTTPServer.set :port, server.config[:http_port]
-    HTTPServer.set :config, server.config
-    HTTPServer.set :middlewares, server.middlewares
-    HTTPServer.run!
-  end
-end
+server = Inventory::Server::Server.new({})
+Inventory::Server::HTTPServer.set :config, server.config
+Inventory::Server::HTTPServer.set :middlewares, server.middlewares
+run Inventory::Server::HTTPServer
