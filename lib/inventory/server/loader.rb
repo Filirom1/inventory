@@ -1,11 +1,13 @@
 require 'filum'
 require 'inventory/server/inventory_error'
 
+PLUGINS_DIR = Pathname.new(File.join File.dirname(__FILE__), '..', '..', '..', 'plugins').cleanpath
+
 module Inventory
   module Server
     class Loader
       def initialize(config)
-        @plugins_path = [File.dirname(__FILE__)] + config[:plugins_path].split(',')
+        @plugins_path = [PLUGINS_DIR] + config[:plugins_path].split(',')
         @plugins_path.each { |path|
           raise InventoryError.new "plugins_path #{path} not found" unless File.directory? path
         }

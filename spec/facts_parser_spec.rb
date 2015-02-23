@@ -1,5 +1,5 @@
 # encoding: utf-8
-require 'inventory/server/facts_parser'
+require_relative '../plugins/facts_parser'
 
 require "filum"
 

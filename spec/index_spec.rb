@@ -1,4 +1,4 @@
-require 'inventory/server/index'
+require_relative '../plugins/index'
 
 require "filum"
 require 'webmock/rspec'

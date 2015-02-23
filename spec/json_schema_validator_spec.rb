@@ -1,4 +1,4 @@
-require 'inventory/server/json_schema_validator'
+require_relative '../plugins/json_schema_validator'
 
 require "filum"
 require 'rspec/mocks'

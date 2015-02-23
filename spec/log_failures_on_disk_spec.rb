@@ -1,4 +1,4 @@
-require 'inventory/server/log_failures_on_disk'
+require_relative '../plugins/log_failures_on_disk'
 require "filum"
 require 'rspec/mocks'
 
@@ -41,7 +41,7 @@ RSpec.describe Inventory::Server::LogFailuresOnDisk do
 
     context "with error" do
       it "should write facts" do
-        raise_error = lambda{ |env| raise "an error" }
+        raise_error = lambda{ |e| raise "an error" }
         expect(File).to receive(:write).with('./log/MY_UUID', 'body')
         Inventory::Server::LogFailuresOnDisk.new(raise_error, config).call(env)
       end
