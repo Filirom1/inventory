@@ -40,6 +40,7 @@ RSpec.describe Inventory::Server::LogFailuresOnDisk do
       it "should write facts" do
         raise_error = lambda{ |e| raise "an error" }
         expect(File).to receive(:write).with('./log/MY_UUID', 'body')
+        expect(File).to receive(:write).with('./log/MY_UUID.log', /an error/)
         Inventory::Server::LogFailuresOnDisk.new(raise_error, config).call(env)
       end
     end

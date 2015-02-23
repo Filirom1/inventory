@@ -25,6 +25,7 @@ module Inventory
           InventoryLogger.logger.error "#{e.backtrace}"
 
           File.write(filepath, body)
+          File.write("#{filepath}.log", "#{e}\n#{e.backtrace.join('\n')}")
         end
       end
     end
