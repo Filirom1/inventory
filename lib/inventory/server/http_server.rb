@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'json'
+require 'inventory/server/inventory_error'
 
 module Inventory
   module Server

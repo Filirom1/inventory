@@ -1,5 +1,6 @@
 require 'filum'
 require 'json-schema'
+require 'inventory/server/inventory_error'
 
 module Inventory
   module Server
@@ -12,7 +13,7 @@ module Inventory
       def call(env)
         Filum.logger.info "JSON Schema Validator"
         facts = env[:facts]
-        raise 'facts is missing' if facts.nil? || facts.empty?
+        raise InventoryError.new 'facts is missing' if facts.nil? || facts.empty?
 
         type = facts[@config[:type_key]] || @config[:type_default]
         version = facts[@config[:version_key]] || @config[:version_default]

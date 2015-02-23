@@ -1,4 +1,5 @@
 require 'filum'
+require 'inventory/server/inventory_error'
 
 module Inventory
   module Server
@@ -6,7 +7,7 @@ module Inventory
       def initialize(config)
         @plugins_path = [File.dirname(__FILE__)] + config[:plugins_path].split(',')
         @plugins_path.each { |path|
-          raise "plugins_path #{path} not found" unless File.directory? path
+          raise InventoryError.new "plugins_path #{path} not found" unless File.directory? path
         }
         @loaded = []
       end
@@ -23,7 +24,7 @@ module Inventory
             klass_name = classify(plugin)
             p = Object.const_get("Inventory").const_get("Server").const_get(klass_name)
           }
-          raise "Plugin #{plugin} not found" if !p
+          raise InventoryError.new "Plugin #{plugin} not found" if !p
           plugin_klasses << p
         }
         return plugin_klasses

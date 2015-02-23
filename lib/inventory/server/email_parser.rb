@@ -1,5 +1,6 @@
 require "mail"
 require "filum"
+require 'inventory/server/inventory_error'
 
 module Inventory
   module Server
@@ -12,12 +13,12 @@ module Inventory
 
         # Use email subject as an ID
         email_subject = email.subject
-        raise "email subject is missing" if email_subject.nil? || email_subject.empty?
+        raise InventoryError.new "email subject is missing" if email_subject.nil? || email_subject.empty?
         id = email_subject
 
         # Decode the email body
         email_body = email.body.decoded
-        raise "email body is missing" if email_body.nil? || email_body.empty?
+        raise InventoryError.new "email body is missing" if email_body.nil? || email_body.empty?
         body = email_body
 
         return id, body

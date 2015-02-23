@@ -1,6 +1,7 @@
 require 'rest-client'
 require 'json'
 require 'filum'
+require 'inventory/server/inventory_error'
 
 # Forward RestClient logs to Filum
 RestClient.log =
@@ -24,8 +25,8 @@ module Inventory
         # Index it into elasticsearch
         id = env[:id]
         facts = env[:facts]
-        raise 'id is missing' if id.nil? || id.empty?
-        raise 'facts is missing' if facts.nil? || facts.empty?
+        raise InventoryError.new 'id is missing' if id.nil? || id.empty?
+        raise InventoryError.new 'facts is missing' if facts.nil? || facts.empty?
 
         type = facts[@config[:type_key]] || @config[:type_default]
         version = facts[@config[:version_key]] || @config[:version_default]
@@ -35,7 +36,7 @@ module Inventory
           Filum.logger.info response
         rescue => e
           if e.respond_to?(:response)
-            raise "#{e}: #{e.response}"
+            raise InventoryError.new "#{e}: #{e.response}"
           else
             raise e
           end

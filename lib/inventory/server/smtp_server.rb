@@ -2,6 +2,7 @@ require "rubygems"
 require "midi-smtp-server"
 require 'filum'
 require "inventory/server/email_parser"
+require 'inventory/server/inventory_error'
 
 module Inventory
   module Server

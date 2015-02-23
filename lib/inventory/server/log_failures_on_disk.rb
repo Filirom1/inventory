@@ -1,3 +1,5 @@
+require 'inventory/server/inventory_error'
+
 module Inventory
   module Server
     class LogFailuresOnDisk
@@ -8,10 +10,10 @@ module Inventory
 
       def call(env)
         id = env[:id]
-        raise 'id missing' if id.nil? || id.empty?
+        raise InventoryError.new 'id missing' if id.nil? || id.empty?
 
         body = env[:body]
-        raise "body missing" if body.nil? || body.empty?
+        raise InventoryError.new "body missing" if body.nil? || body.empty?
 
         begin
           @app.call(env)

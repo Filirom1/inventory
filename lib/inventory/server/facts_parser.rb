@@ -3,6 +3,7 @@ require 'json'
 require 'crack'
 require 'yaml'
 require 'ensure/encoding'
+require 'inventory/server/inventory_error'
 
 module Inventory
   module Server
@@ -15,10 +16,10 @@ module Inventory
       def call(env)
         Filum.logger.info "Facts parser"
         body = env[:body]
-        raise "body missing" if body.nil? || body.empty?
+        raise InventoryError.new "body missing" if body.nil? || body.empty?
 
         format = guess_format body
-        raise "bad format" if !format
+        raise InventoryError.new "bad format" if !format
 
         env[:facts] = parse(format, body)
         @app.call(env)
