@@ -64,7 +64,7 @@ RSpec.describe Inventory::Server::FactsParser, '#call' do
     it "should throw an error" do
       expect {
         Inventory::Server::FactsParser.new(noop, {}).call(env)
-      }.to raise_error REXML::ParseException
+      }.to raise_error Nokogiri::XML::SyntaxError
     end
   end
 

@@ -1,7 +1,10 @@
 # encoding: utf-8
 require 'json'
-require 'crack'
+require 'nokogiri'
 require 'yaml'
+require "base64"
+require 'active_support/core_ext/hash'  #from_xml
+
 require 'ensure/encoding'
 require 'inventory/server/inventory_error'
 require "inventory/server/logger"
@@ -40,7 +43,9 @@ module Inventory
       def parse(format, str)
         case format
         when :xml
-          hash = Crack::XML.parse(str)
+          # XML validation
+          valid_xml_str = Nokogiri::XML(str) { |config| config.strict }.to_s
+          hash = Hash.from_xml(valid_xml_str)
           xml = decode_base64(hash)
           keys = xml.keys
           if keys.length == 1
