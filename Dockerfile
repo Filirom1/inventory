@@ -1,0 +1,18 @@
+FROM      centos
+MAINTAINER Filirom1 <filirom1@gmail.com>
+
+ADD . /app
+
+RUN yum install -y epel-release
+RUN yum install -y patch tar git ruby ruby-devel rubygem-bundler httpd make gcc gcc-c++ zlib-devel \
+    http://puias.math.ias.edu/data/puias/unsupported/7/x86_64/mod_passenger-4.0.18-9.5.sdl7.x86_64.rpm \
+    http://puias.math.ias.edu/data/puias/unsupported/7/x86_64/rubygem-passenger-4.0.18-9.5.sdl7.x86_64.rpm \
+    http://puias.math.ias.edu/data/puias/unsupported/7/x86_64/rubygem-passenger-native-4.0.18-9.5.sdl7.x86_64.rpm \
+    http://puias.math.ias.edu/data/puias/unsupported/7/x86_64/rubygem-passenger-native-libs-4.0.18-9.5.sdl7.x86_64.rpm
+
+RUN cd /app  && bundle install
+RUN cp /app/docker/passenger.conf /etc/httpd/conf.d/passenger.conf
+RUN mkdir -p /var/log/inventory && chmod o+rwX /var/log/inventory
+
+EXPOSE 80
+CMD    ["/app/docker/run-httpd.sh"]
