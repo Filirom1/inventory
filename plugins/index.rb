@@ -28,11 +28,13 @@ module Inventory
         raise InventoryError.new 'id is missing' if id.nil? || id.empty?
         raise InventoryError.new 'facts is missing' if facts.nil? || facts.empty?
 
-        type = clean_string( facts[@config[:type_key]] || @config[:type_default] )
-        version = clean_string( facts[@config[:version_key]] || @config[:version_default] )
+        type = facts[@config[:type_key]] || @config[:type_default]
+        version = facts[@config[:version_key]] || @config[:version_default]
+
+        url = clean_string "#{@config[:es_host]}/#{@config[:es_index_prefix]}#{type}/#{version}/#{id}"
 
         begin
-          response = RestClient.put("#{@config[:es_host]}/#{@config[:es_index_prefix]}#{type}/#{version}/#{id}", facts.to_json)
+          response = RestClient.put(url, facts.to_json)
           InventoryLogger.logger.info response
         rescue => e
           if e.respond_to?(:response)
