@@ -1,9 +1,8 @@
 # encoding: utf-8
 require 'json'
-require 'nokogiri'
 require 'yaml'
 require "base64"
-require 'active_support/core_ext/hash'  #from_xml
+require 'libxml_to_hash'
 
 require 'ensure/encoding'
 require 'inventory/server/inventory_error'
@@ -45,13 +44,12 @@ module Inventory
         when :xml
           # XML validation
 
-          valid_xml_str = nil
+          hash = nil
           begin
-            valid_xml_str = Nokogiri::XML(str) { |config| config.strict }.to_s
+            hash = Hash.from_libxml! str
           rescue => e
             raise $!, "Invalid XML #{$!}", $!.backtrace
           end
-          hash = Hash.from_xml(valid_xml_str)
           xml = decode_base64(hash)
           keys = xml.keys
           if keys.length == 1
