@@ -1,4 +1,4 @@
-box: wercker-labs/docker
+box: wercker/docker
 build:
     steps:
         - script:
@@ -9,4 +9,5 @@ build:
             code: docker run -t inventory
         - script:
             name: test
-            code: curl -XPOST localhost/api/v1/facts/MY_UUID -d '{"key": "value"}'
+            code: |
+                  curl -XPOST localhost/api/v1/facts/MY_UUID -d '{"key": "value"}'
