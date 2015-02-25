@@ -79,6 +79,18 @@ RSpec.describe Inventory::Server::FactsParser, '#call' do
     end
   end
 
+  context "with XML using empty node" do
+    env = { :body => '''
+            <inventory>
+              <key></key>
+            </inventory>''' }
+    it "should return nil" do
+      Inventory::Server::FactsParser.new(noop, {}).call(env)
+      expect(env[:facts]).to eq 'key' => nil
+    end
+  end
+
+
   context "with good XML with base64 in object" do
     env = { :body => '''
             <inventory>

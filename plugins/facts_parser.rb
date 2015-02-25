@@ -67,10 +67,12 @@ module Inventory
       # decode base64 if present in this deep structure
       def decode_base64(something)
         if something.is_a?(Hash)
+          return nil if something.empty?
           something.each {|key, value|
             something[key] = decode_base64(value)
           }
         elsif something.is_a?(Array)
+          return nil if something.empty?
           something = something.map {|value|
             decode_base64(value)
           }
