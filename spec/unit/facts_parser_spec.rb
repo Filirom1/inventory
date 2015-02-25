@@ -65,6 +65,9 @@ RSpec.describe Inventory::Server::FactsParser, '#call' do
       expect {
         Inventory::Server::FactsParser.new(noop, {}).call(env)
       }.to raise_error Nokogiri::XML::SyntaxError
+      expect {
+        Inventory::Server::FactsParser.new(noop, {}).call(env)
+      }.to raise_error /Invalid XML/
     end
   end
 

@@ -44,7 +44,13 @@ module Inventory
         case format
         when :xml
           # XML validation
-          valid_xml_str = Nokogiri::XML(str) { |config| config.strict }.to_s
+
+          valid_xml_str = nil
+          begin
+            valid_xml_str = Nokogiri::XML(str) { |config| config.strict }.to_s
+          rescue => e
+            raise $!, "Invalid XML #{$!}", $!.backtrace
+          end
           hash = Hash.from_xml(valid_xml_str)
           xml = decode_base64(hash)
           keys = xml.keys
