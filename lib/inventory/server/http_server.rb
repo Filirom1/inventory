@@ -8,13 +8,21 @@ module Inventory
     class HTTPServer < Sinatra::Base
 
       configure do
-        rack_logger = Object.new.tap do |proxy|
+        logger = Object.new.tap do |proxy|
           def proxy.<<(message)
             InventoryLogger.logger.info message
           end
+          def proxy.write(message)
+            InventoryLogger.logger.info message
+          end
+          def proxy.flush; end
         end
 
-        use Rack::CommonLogger, rack_logger
+        use Rack::CommonLogger, logger
+
+        before {
+          env["rack.errors"] = logger
+        }
 
         Rack::Utils.key_space_limit = 262144 
 

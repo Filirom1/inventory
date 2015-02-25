@@ -1,4 +1,4 @@
-require_relative '../plugins/json_schema_validator'
+require_relative '../../plugins/json_schema_validator'
 
 require 'rspec/mocks'
 

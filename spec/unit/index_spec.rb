@@ -1,4 +1,4 @@
-require_relative '../plugins/index'
+require_relative '../../plugins/index'
 
 require 'webmock/rspec'
 

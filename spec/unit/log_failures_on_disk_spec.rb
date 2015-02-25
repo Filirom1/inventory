@@ -1,4 +1,4 @@
-require_relative '../plugins/log_failures_on_disk'
+require_relative '../../plugins/log_failures_on_disk'
 require 'rspec/mocks'
 
 noop = lambda {|env|}
