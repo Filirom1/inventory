@@ -13,7 +13,7 @@ module Inventory
       def call(env)
         InventoryLogger.logger.info "JSON Schema Validator"
         facts = env[:facts]
-        raise InventoryError.new 'facts is missing' if facts.nil? || facts.empty?
+        raise InventoryError.new 'facts is missing' if facts.nil?
 
         type = facts[@config[:type_key]] || @config[:type_default]
         version = facts[@config[:version_key]] || @config[:version_default]

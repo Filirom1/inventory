@@ -26,7 +26,7 @@ module Inventory
         id = env[:id]
         facts = env[:facts]
         raise InventoryError.new 'id is missing' if id.nil? || id.empty?
-        raise InventoryError.new 'facts is missing' if facts.nil? || facts.empty?
+        raise InventoryError.new 'facts is missing' if facts.nil?
 
         type = facts[@config[:type_key]] || @config[:type_default]
         version = facts[@config[:version_key]] || @config[:version_default]
