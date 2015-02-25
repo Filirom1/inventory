@@ -33,14 +33,3 @@ module Inventory
     end
   end
 end
-
-# http://www.mattburkedev.com/shim-file-dot-write-in-ruby-1-dot-8-7/
-unless File.respond_to?(:write)
-  class File
-    def self.write(filename, contents)
-      File.open(filename, 'w') do |file|
-        file.write contents
-      end
-    end
-  end
-end
