@@ -18,7 +18,7 @@ module Inventory
         :type_key => 'type',
         :type_default => 'facts',
         :version_key => 'version',
-        :version_default => '1.0.0',
+        :version_default => '1-0-0',
         :json_schema_dir => '/etc/inventory/json_schema',
         :plugins_path => '',
         :plugins => 'log_failures_on_disk,facts_parser,json_schema_validator,index',

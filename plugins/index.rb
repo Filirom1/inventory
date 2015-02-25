@@ -28,8 +28,8 @@ module Inventory
         raise InventoryError.new 'id is missing' if id.nil? || id.empty?
         raise InventoryError.new 'facts is missing' if facts.nil? || facts.empty?
 
-        type = facts[@config[:type_key]] || @config[:type_default]
-        version = facts[@config[:version_key]] || @config[:version_default]
+        type = clean_string( facts[@config[:type_key]] || @config[:type_default] )
+        version = clean_string( facts[@config[:version_key]] || @config[:version_default] )
 
         begin
           response = RestClient.put("#{@config[:es_host]}/#{type}/#{version}/#{id}", facts.to_json)
@@ -42,6 +42,12 @@ module Inventory
           end
         end
         @app.call(env)
+      end
+
+      private
+
+      def clean_string(str)
+        str.gsub('.', '-').gsub(' ', '_').encode(Encoding.find('ASCII'), :invalid => :replace, :undef => :replace, :replace => '')
       end
     end
   end

@@ -23,7 +23,7 @@ RSpec.describe Inventory::Server::JsonSchemaValidator, '#call' do
   context "without version and type" do
     env = { :facts => { 'key' => 'value'} }
     it "should use the default config" do
-      expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/facts/1.0.0.json").and_return false
+      expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/facts/1-0-0.json").and_return false
       Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
     end
   end
