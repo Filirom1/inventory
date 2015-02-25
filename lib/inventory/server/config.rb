@@ -12,6 +12,7 @@ module Inventory
         :max_connections => 4,
         :debug => false,
         :es_host => 'http://localhost:9200',
+        :es_index_prefix => 'inventory_',
         :failed_facts_dir => '/var/log/inventory/failures',
         :logger => 'stdout',
         :log_level => 'INFO',

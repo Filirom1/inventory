@@ -32,7 +32,7 @@ module Inventory
         version = clean_string( facts[@config[:version_key]] || @config[:version_default] )
 
         begin
-          response = RestClient.put("#{@config[:es_host]}/#{type}/#{version}/#{id}", facts.to_json)
+          response = RestClient.put("#{@config[:es_host]}/#{@config[:es_index_prefix]}#{type}/#{version}/#{id}", facts.to_json)
           InventoryLogger.logger.info response
         rescue => e
           if e.respond_to?(:response)
