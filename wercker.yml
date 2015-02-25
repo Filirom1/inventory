@@ -3,7 +3,7 @@ build:
     steps:
         - script:
             name: docker build
-            code: docker build -t inventory .
+            code: docker build -t inventory -f Dockerfile-unicorn .
         - script:
             name: docker run
             code: docker run -t inventory
