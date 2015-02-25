@@ -31,6 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'sinatra'
   spec.add_dependency 'ensure-encoding'
   spec.add_dependency 'json-schema'
+  spec.add_dependency 'unicorn'
 
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake", "~> 10.0"
