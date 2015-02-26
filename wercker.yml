@@ -6,7 +6,7 @@ build:
             code: docker build -t inventory .
         - script:
             name: docker run
-            code: docker run -t inventory
+            code: docker run -t inventory -d && sleep 5
         - script:
             name: test
             code: |
