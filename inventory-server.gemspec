@@ -41,4 +41,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec-mocks"
   spec.add_development_dependency "webmock", "~> 1.20"
   spec.add_development_dependency 'thin'
+  spec.add_development_dependency 'parallel'
 end
