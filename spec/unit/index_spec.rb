@@ -1,3 +1,4 @@
+# encoding: utf-8
 require_relative '../../plugins/index'
 
 require 'webmock/rspec'
