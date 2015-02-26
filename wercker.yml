@@ -9,4 +9,4 @@ build:
             code: docker run -d true -t inventory && sleep 5
         - script:
             name: integration tests
-            code: docker run -w /app inventory-unicorn rspec --tag integration
+            code: docker run -w /app inventory rspec --tag integration
