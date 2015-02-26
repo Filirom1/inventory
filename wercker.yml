@@ -6,7 +6,7 @@ build:
             code: docker build -t inventory .
         - script:
             name: docker run
-            code: docker run -t inventory -d && sleep 5
+            code: docker run -d true -t inventory && sleep 5
         - script:
-            name: test
-            code: bundle install && bundle exec rspec --tag integration
+            name: integration tests
+            code: docker run -w /app inventory-unicorn rspec --tag integration
