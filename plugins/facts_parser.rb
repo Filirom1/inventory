@@ -47,15 +47,15 @@ module Inventory
           hash = nil
           begin
             hash = Hash.from_libxml! str
+            xml = decode_base64(hash)
+            keys = xml.keys
+            if keys.length == 1
+              xml = xml[keys[0]]
+            end
+            raise "Expect < found #{xml.text} " if xml.is_a?(LibXmlNode) and  xml.text != ""
+            return xml
           rescue => e
             raise $!, "Invalid XML #{$!}", $!.backtrace
-          end
-          xml = decode_base64(hash)
-          keys = xml.keys
-          if keys.length == 1
-            return xml[keys[0]] 
-          else
-            return xml
           end
         when :json
           JSON.parse str

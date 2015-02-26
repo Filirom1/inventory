@@ -68,6 +68,19 @@ RSpec.describe Inventory::Server::FactsParser, '#call' do
     end
   end
 
+  context "with an other bad XML" do
+    env = { :body => '''
+            <inventory>
+              <key>value</key>
+              text
+            </inventory>''' }
+    it "should throw an error" do
+      expect {
+        Inventory::Server::FactsParser.new(noop, {}).call(env)
+      }.to raise_error /Invalid XML/
+    end
+  end
+
   context "with good XML" do
     env = { :body => '''
             <inventory>
