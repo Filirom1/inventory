@@ -14,14 +14,11 @@ database:
 
 test:
   override:
-    - fig up
-    - fig run web rspec --tag integration
+    - fig up -d
+    - fig run web cd /app  && bundle install && bundle exec rspec spec --tag integration
 
 deployment:
   prod:
     branch: master
     commands:
-      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker push filirom1/inventory:latest
-      - docker tag filirom1/inventory:latest filirom1/inventory:$CIRCLE_SHA1
-      - docker push filirom1/inventory:$CIRCLE_SHA1
+      - curl --data "build=true" -X POST https://registry.hub.docker.com/u/filirom1/inventory/trigger/$DOCKER_HUB_TOKEN/
