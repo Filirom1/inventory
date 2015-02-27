@@ -15,7 +15,9 @@ database:
 test:
   override:
     - fig up -d
-    - fig run web cd /app  && bundle install && bundle exec rspec spec --tag integration
+    - fig run web cd /app  && bundle install 
+    - fig run web cd /app  && bundle exec rspec spec
+    - fig run web cd /app  && bundle exec rspec spec --tag integration
 
 deployment:
   prod:
