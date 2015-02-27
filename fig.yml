@@ -1,0 +1,18 @@
+web:
+  build: .
+  links:
+   - elasticsearch
+  ports:
+   - "80:80"
+  environment:
+    INVENTORY_ES_HOST: http://elasticsearch:9200
+kibana:
+  image: bobrik/kibana4
+  ports: 
+    - 5601:5601
+  links: 
+    - elasticsearch
+  environment:
+    KIBANA_ES_URL: http://elasticsearch:9200
+elasticsearch:
+  image: elasticsearch

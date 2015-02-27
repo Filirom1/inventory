@@ -1,0 +1,27 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - sudo curl -o /usr/local/bin/fig -L https://github.com/docker/fig/releases/download/1.0.1/fig-`uname -s`-`uname -m`
+    - sudo chmod +x /usr/local/bin/fig
+    - fig build
+
+database:
+  override:
+    - /bin/true
+
+test:
+  override:
+    - fig up
+    - fig run web rspec --tag integration
+
+deployment:
+  prod:
+    branch: master
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker push filirom1/inventory:latest
+      - docker tag filirom1/inventory:latest filirom1/inventory:$CIRCLE_SHA1
+      - docker push filirom1/inventory:$CIRCLE_SHA1
