@@ -4,7 +4,7 @@ MAINTAINER Filirom1 <filirom1@gmail.com>
 ADD . /app
 
 RUN yum install -y epel-release
-RUN yum install -y patch tar git ruby ruby-devel rubygem-bundler make gcc gcc-c++ zlib-devel httpd \
+RUN yum install -y patch tar git ruby ruby-devel rubygem-bundler make gcc gcc-c++ zlib-devel libxml2-devel httpd \
     http://puias.math.ias.edu/data/puias/unsupported/7/x86_64/mod_passenger-4.0.18-9.5.sdl7.x86_64.rpm \
     http://puias.math.ias.edu/data/puias/unsupported/7/x86_64/rubygem-passenger-4.0.18-9.5.sdl7.x86_64.rpm \
     http://puias.math.ias.edu/data/puias/unsupported/7/x86_64/rubygem-passenger-native-4.0.18-9.5.sdl7.x86_64.rpm \

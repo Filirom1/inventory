@@ -4,7 +4,7 @@ MAINTAINER Filirom1 <filirom1@gmail.com>
 ADD . /app
 
 RUN yum install -y epel-release
-RUN yum install -y patch tar git ruby ruby-devel rubygem-bundler make gcc gcc-c++ zlib-devel nginx 
+RUN yum install -y patch tar git ruby ruby-devel rubygem-bundler make gcc gcc-c++ zlib-devel libxml2-devel nginx 
 
 RUN cd /app  && bundle install
 
