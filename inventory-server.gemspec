@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["filirom1@gmail.com"]
   spec.summary       = %q{Inventory server store and index data sent from the agent}
   spec.description   = %q{Inventory server store and index data sent from the agent}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/Filirom1/inventory"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
