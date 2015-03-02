@@ -33,7 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'json-schema', '~> 2.5'
   spec.add_dependency 'unicorn', '~> 4.8'
 
-  spec.add_development_dependency "bundler", "~> 1.7"
+  spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rack-test", "~> 0.6"
   spec.add_development_dependency "codeclimate-test-reporter", "~> 0.4"
