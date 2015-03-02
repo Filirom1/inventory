@@ -4,7 +4,9 @@ Inventory is an HTTP and SMTP Server that process and index facts produced by fa
 
 ## Installation, the Docker way
 
-    fig up -d
+    $ git clone https://github.com/Filirom1/inventory.git
+    $ cd inventory
+    $ fig up -d
 
 ## Installation, the hard way
 
