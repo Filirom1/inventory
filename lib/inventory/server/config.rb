@@ -7,29 +7,20 @@ module Inventory
 
     module Config
       def self.generate(cli_config)
+        mapping = {
+          'stdout'=> $stdout,
+          'stderr'=> $stderr,
+          'INFO'=>Logger::INFO,
+          'DEBUG'=>Logger::DEBUG,
+          'WARN'=>Logger::WARN,
+          'ERROR'=>Logger::ERROR,
+          'FATAL'=>Logger::FATAL
+        }
+
         config = self.defaults.merge self.etc.merge self.env.merge cli_config
 
         config.each{|sym, val|
-          result = val
-          # Logging
-          if val == 'stdout'
-            result = $stdout
-          elsif val == 'stderr'
-            result = $stderr
-          # Logging Level
-          elsif val == 'INFO'
-            result = Logger::INFO
-          elsif val == 'DEBUG'
-            result = Logger::DEBUG
-          elsif val == 'WARN'
-            result = Logger::WARN
-          elsif val == 'ERROR'
-            result = Logger::ERROR
-          elsif val == 'FATAL'
-            result = Logger::FATAL
-          end
-
-          config[sym] = result
+          config[sym] = mapping[val] if mapping[val]
         }
 
         FileUtils.mkdir_p config[:failed_facts_dir]
