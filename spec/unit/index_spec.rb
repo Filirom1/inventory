@@ -5,7 +5,7 @@ require 'webmock/rspec'
 
 noop = lambda {|env|}
 
-config = Inventory::Server::Config::DEFAULTS
+config = Inventory::Server::Config::defaults
 
 RSpec.describe Inventory::Server::Index, '#call' do
   # needed for code climates to work after rspec

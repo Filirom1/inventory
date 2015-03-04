@@ -7,7 +7,8 @@ module Inventory
   module Server
     class Loader
       def initialize(config)
-        @plugins_path = [PLUGINS_DIR] + config[:plugins_path].split(',')
+        @plugins_path = [PLUGINS_DIR]
+        @plugins_path << config[:plugins_path] if config[:plugins_path]
         @plugins_path.each { |path|
           raise InventoryError.new "plugins_path #{path} not found" unless File.directory? path
         }

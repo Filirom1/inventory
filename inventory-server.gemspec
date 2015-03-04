@@ -23,11 +23,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'gserver', '~> 0.0'
   spec.add_dependency 'mail', '~> 2.6'
   spec.add_dependency 'filum', '~> 2.2'
-  spec.add_dependency 'json', '~> 1.8'
-  spec.add_dependency 'activesupport', '~> 4.2'
   spec.add_dependency 'libxml-to-hash', '~> 0.2'
   spec.add_dependency 'middleware', '~> 0.1'
-  spec.add_dependency 'app_configuration', '~> 0.0'
   spec.add_dependency 'sinatra', '~> 1.4'
   spec.add_dependency 'ensure-encoding', '~> 0.1'
   spec.add_dependency 'json-schema', '~> 2.5'
@@ -40,6 +37,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "rspec-mocks", "~> 3.2"
   spec.add_development_dependency "webmock", "~> 1.20"
-  spec.add_development_dependency 'thin', '~> 1.6'
   spec.add_development_dependency 'parallel', '~> 1.4'
 end

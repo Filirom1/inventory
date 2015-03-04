@@ -3,7 +3,7 @@ require 'inventory/server/loader'
 RSpec.describe Inventory::Server::Loader do
 
   context "without plugin_path" do
-    loader = Inventory::Server::Loader.new(Inventory::Server::Config::DEFAULTS)
+    loader = Inventory::Server::Loader.new(Inventory::Server::Config::defaults)
 
     it "should throw an error when loading non existing plugins" do
       expect {

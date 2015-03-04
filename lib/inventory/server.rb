@@ -17,7 +17,7 @@ module Inventory
         InventoryLogger.logger.level = config[:log_level]
 
         # Dynamically load plugins from plugins_path
-        plugin_names = config[:plugins].split(',')
+        plugin_names = config[:plugins]
         @middlewares = Middleware::Builder.new do
           plugins = Loader.new(config).load_plugins(*plugin_names)
           plugins.each {|klass|

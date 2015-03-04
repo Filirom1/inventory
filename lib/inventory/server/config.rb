@@ -1,4 +1,4 @@
-require 'app_configuration'
+require 'yaml'
 require 'fileutils'
 require "inventory/server/logger"
 
@@ -6,52 +6,13 @@ module Inventory
   module Server
 
     module Config
-      DEFAULTS = {
-        :host => '127.0.0.1',
-        :smtp_port => 2525,
-        :max_connections => 4,
-        :debug => false,
-        :es_host => 'http://localhost:9200',
-        :es_index_prefix => 'inventory_',
-        :failed_facts_dir => '/var/log/inventory/failures',
-        :logger => 'stdout',
-        :log_level => 'INFO',
-        :type_key => 'type',
-        :type_default => 'facts',
-        :version_key => 'version',
-        :version_default => '1-0-0',
-        :json_schema_dir => '/etc/inventory/json_schema',
-        :plugins_path => '',
-        :plugins => 'log_failures_on_disk,facts_parser,json_schema_validator,index',
-      }
-
       def self.generate(cli_config)
+        config = self.defaults.merge self.etc.merge self.env.merge cli_config
 
-        global = AppConfiguration.new('inventory.yml') do
-          base_global_path '/etc'
-          use_env_variables true
-          prefix 'inventory' # ENV prefix: INVENTORY_XXXXX
-        end
-
-        config = {}
-
-        DEFAULTS.each{|sym, default_value|
-
-          val =  cli_config[sym] || global[sym.to_s] || default_value
+        config.each{|sym, val|
           result = val
-
-          # cast config values (ENV values are strings only)
-          if default_value.is_a? Integer
-            result = val.to_i
-          elsif !!default_value == default_value
-            # Boolean
-            if val == true || val =~ /^(true|t|yes|y|1)$/i
-              result = true
-            elsif val == false || val.blank? || val =~ /^(false|f|no|n|0)$/i
-              result = false
-            end
           # Logging
-          elsif val == 'stdout'
+          if val == 'stdout'
             result = $stdout
           elsif val == 'stderr'
             result = $stderr
@@ -67,12 +28,56 @@ module Inventory
           elsif val == 'FATAL'
             result = Logger::FATAL
           end
+
           config[sym] = result
         }
 
         FileUtils.mkdir_p config[:failed_facts_dir]
 
-        config
+        return config
+      end
+
+      private
+
+      def self.load_yaml(filepath)
+        begin
+          hash = YAML.load_file filepath
+        rescue
+          return {}
+        end
+        self.sym_keys! hash
+        hash
+      end
+
+      def self.defaults()
+        default_filename = File.join File.dirname(__FILE__), '..', '..', '..', 'config', 'inventory.yml'
+        self.load_yaml default_filename
+      end
+
+      def self.etc()
+        self.load_yaml "/etc/inventory/inventory.yml"
+      end
+
+      def self.sym_keys!(hash)
+        hash.keys.each do |key|
+            hash[(key.to_sym rescue key) || key] = hash.delete(key)
+        end
+      end
+
+      def self.env()
+        hash = {}
+        ENV.each {|key, value|
+          next unless key.start_with? 'INVENTORY_'
+          key = key.gsub 'INVENTORY_', ''
+          key = key.downcase
+          hash[key] = value
+        }
+
+        # This is an ugly trick to auto cast data types
+        hash = YAML.load hash.map{|k,v| "#{k}: #{v}"}.join("\n")
+
+        self.sym_keys! hash
+        hash
       end
     end
   end

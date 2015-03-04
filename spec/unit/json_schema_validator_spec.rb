@@ -4,7 +4,7 @@ require 'rspec/mocks'
 
 noop = lambda {|env|}
 
-config = Inventory::Server::Config::DEFAULTS
+config = Inventory::Server::Config::defaults
 
 RSpec.describe Inventory::Server::JsonSchemaValidator, '#call' do
 
