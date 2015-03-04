@@ -12,7 +12,6 @@ module Inventory
         @plugins_path.each { |path|
           raise InventoryError.new "plugins_path #{path} not found" unless File.directory? path
         }
-        @loaded = []
       end
 
       # search for plugins in the plugins_path and return a hash of plugin_filename:plugin_klass
@@ -33,17 +32,9 @@ module Inventory
         return plugin_klasses
       end
 
-      # Load a ruby file if not already loaded
+      # Load a ruby file
       def load_file(file)
-        return if @loaded.include? file
-
-        begin
-          @loaded << file
-          kernel_load(file)
-        rescue => e
-          @loaded.delete(file)
-          InventoryLogger.logger.error("Fail to load #{file}: #{e}")
-        end
+        kernel_load(file)
       end
 
       # Usefull for tests
