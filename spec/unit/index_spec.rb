@@ -34,6 +34,18 @@ RSpec.describe Inventory::Server::Index, '#call' do
     end
   end
 
+  context "without an ElasticSearch Server" do
+    env = {:id => 'MY_UUID', :facts => { :key => 'value' } }
+
+    it "should throw an error" do
+      WebMock.allow_net_connect!
+
+      expect {
+        Inventory::Server::Index.new(noop, config).call(env)
+      }.to raise_error(Errno::ECONNREFUSED)
+    end
+  end
+
   context "with an ElasticSearch Server Crashed" do
     env = {:id => 'MY_UUID', :facts => { :key => 'value' } }
 
