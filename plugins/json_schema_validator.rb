@@ -27,6 +27,7 @@ module Inventory
 
         InventoryLogger.logger.info "Use JSON Schema #{json_schema_file}"
         JSON::Validator.validate!(json_schema_file, facts)
+        @app.call(env)
       end
     end
   end
