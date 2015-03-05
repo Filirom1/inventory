@@ -6,17 +6,17 @@ Inventory is an HTTP and SMTP Server that process and index facts produced by fa
 
     $ git clone https://github.com/Filirom1/inventory.git
     $ cd inventory
-    $ fig up -d
+    $ docker-compose up -d
 
 ## Installation, the hard way
 
-Install ElasticSearch, Kibana, ruby >=1.9 and bundler
+Install ElasticSearch, Kibana, ruby >=1.9 and bundler manually
 
     $ git clone https://github.com/Filirom1/inventory.git
-	$ cd inventory
-	$ bundle install
-	$ bundle exec rackup                # to start the HTTP Server
-	$ bundle exec bin/inventory-smtpd   # to start the SMTP Server
+    $ cd inventory
+    $ bundle install
+    $ bundle exec rackup                # to start the HTTP Server
+    $ bundle exec bin/inventory-smtpd   # to start the SMTP Server
 
 ## Usage
 
