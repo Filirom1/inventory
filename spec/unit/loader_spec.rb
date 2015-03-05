@@ -19,7 +19,7 @@ RSpec.describe Inventory::Server::Loader do
   end
 
   context "with an existing plugin_path" do
-    loader = Inventory::Server::Loader.new(:plugins_path => File.join(File.dirname(__FILE__), 'fixtures'))
+    loader = Inventory::Server::Loader.new(:plugins_path => [File.join(File.dirname(__FILE__), 'fixtures')])
     it "should load custom plugins" do
       plugins = loader.load_plugins 'simple_plugin'
       expect(plugins[0]).to eq Inventory::Server::SimplePlugin
@@ -27,7 +27,7 @@ RSpec.describe Inventory::Server::Loader do
 
     it "should throw an error if plugins_path not found" do
       expect {
-        loader = Inventory::Server::Loader.new(:plugins_path => '/tmp/blabla/plugins')
+        loader = Inventory::Server::Loader.new(:plugins_path => ['/tmp/blabla/plugins'])
       }.to raise_error 'plugins_path /tmp/blabla/plugins not found'
     end
   end
