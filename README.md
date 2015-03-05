@@ -78,7 +78,7 @@ Index the received facts in ElasticSearch
 
 Configuration options could be set via environment variables. Each option should be prefixed with `INVENTORY_`. For exemple: `export INVENTORY_LOG_LEVEL=ERROR`
 
-Configurations could also be defined in a YAML file: `/etc/inventory.yml`
+Configurations could also be defined in a YAML file: `/etc/inventory/inventory.yml`
 
 The following options are configurable:
 
