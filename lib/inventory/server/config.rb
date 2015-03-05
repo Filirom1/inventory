@@ -20,7 +20,12 @@ module Inventory
         config = self.defaults.merge self.etc.merge self.env.merge cli_config
 
         config.each{|sym, val|
+          next unless val
           config[sym] = mapping[val] if mapping[val]
+
+          if val.is_a? String and [:plugins, :plugins_path].include? sym
+            config[sym] = val.split(',').collect(&:strip)
+          end
         }
 
         FileUtils.mkdir_p config[:failed_facts_dir]

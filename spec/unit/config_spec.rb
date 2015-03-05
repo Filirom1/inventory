@@ -29,6 +29,8 @@ RSpec.describe Inventory::Server::Config do
         ENV['INVENTORY_DEBUG'] = "false"
         ENV['INVENTORY_LOGGER'] = "stdout"
         ENV['INVENTORY_LOG_LEVEL'] = "DEBUG"
+        ENV['INVENTORY_PLUGINS'] = "plugin1, plugin2"
+        ENV['INVENTORY_PLUGINS_PATH'] = "/path/to/plugin/dir1,/path/to/plugin/dir2"
       end
 
       after do
@@ -37,6 +39,8 @@ RSpec.describe Inventory::Server::Config do
         ENV['INVENTORY_DEBUG'] = nil
         ENV['INVENTORY_LOGGER'] = nil
         ENV['INVENTORY_LOG_LEVEL'] = nil
+        ENV['INVENTORY_PLUGINS'] = nil
+        ENV['INVENTORY_PLUGINS_PATH'] = nil
       end
 
       it "should use the ENV configuration" do
@@ -64,6 +68,15 @@ RSpec.describe Inventory::Server::Config do
         expect(config[:log_level]).to eq Logger::DEBUG
       end
 
+      it "should should return an array for plugins" do
+        config = Inventory::Server::Config.generate({})
+        expect(config[:plugins]).to eq ['plugin1', 'plugin2']
+      end
+
+      it "should should return an array for plugins_path" do
+        config = Inventory::Server::Config.generate({})
+        expect(config[:plugins_path]).to eq ['/path/to/plugin/dir1', '/path/to/plugin/dir2']
+      end
 
       context "with CLI configuration" do
         it "should use the CLI configuration" do
