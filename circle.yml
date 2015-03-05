@@ -4,9 +4,9 @@ machine:
 
 dependencies:
   override:
-    - sudo curl -o /usr/local/bin/fig -L https://github.com/docker/fig/releases/download/1.0.1/fig-`uname -s`-`uname -m`
-    - sudo chmod +x /usr/local/bin/fig
-    - fig build
+    - sudo curl -o /usr/local/bin/docker-compose -L https://github.com/docker/compose/releases/download/1.1.0/docker-compose-`uname -s`-`uname -m`
+    - sudo chmod +x /usr/local/bin/docker-compose
+    - docker-compose build
 
 database:
   override:
@@ -14,10 +14,10 @@ database:
 
 test:
   override:
-    - fig up -d
-    - fig run web cd /app  && bundle install 
-    - fig run web cd /app  && bundle exec rspec spec
-    - fig run web cd /app  && bundle exec rspec spec --tag integration
+    - docker-compose up -d
+    - docker-compose run web cd /app  && bundle install 
+    - docker-compose run web cd /app  && bundle exec rspec spec
+    - docker-compose run web cd /app  && bundle exec rspec spec --tag integration
 
 deployment:
   prod:
