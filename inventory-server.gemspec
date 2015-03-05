@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'gserver', '~> 0.0'
   spec.add_dependency 'mail', '~> 2.6'
   spec.add_dependency 'filum', '~> 2.2'
+  spec.add_dependency 'json', '~> 1.8'
   spec.add_dependency 'libxml-to-hash', '~> 0.2'
   spec.add_dependency 'middleware', '~> 0.1'
   spec.add_dependency 'sinatra', '~> 1.4'
