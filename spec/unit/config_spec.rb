@@ -3,10 +3,13 @@ require 'inventory/server/config'
 RSpec.describe Inventory::Server::Config do
   context "without configuration" do
     before do
+      # remove env env configuration
       ENV.each{|key|
         next unless key.is_a? String and key.start_with? 'INVENTORY_'
         ENV[key] = nil
       }
+      # avoid mkdir exception
+      expect(FileUtils).to receive(:mkdir_p).with(any_args)
     end
 
     it "should should use default configuration" do
@@ -16,6 +19,9 @@ RSpec.describe Inventory::Server::Config do
   end
 
   context "with etc configuration" do
+    before do
+      ENV['INVENTORY_FAILED_FACTS_DIR'] = "./log/"
+    end
 
     before(:each) do
       expect(Inventory::Server::Config).to receive(:etc).and_return({:smtp_port => 2424})
@@ -35,7 +41,6 @@ RSpec.describe Inventory::Server::Config do
         ENV['INVENTORY_LOG_LEVEL'] = "DEBUG"
         ENV['INVENTORY_PLUGINS'] = "plugin1, plugin2"
         ENV['INVENTORY_PLUGINS_PATH'] = "/path/to/plugin/dir1,/path/to/plugin/dir2"
-        ENV['INVENTORY_FAILED_FACTS_DIR'] = "./log/"
       end
 
       after do
@@ -46,7 +51,6 @@ RSpec.describe Inventory::Server::Config do
         ENV['INVENTORY_LOG_LEVEL'] = nil
         ENV['INVENTORY_PLUGINS'] = nil
         ENV['INVENTORY_PLUGINS_PATH'] = nil
-        ENV['INVENTORY_FAILED_FACTS_DIR'] = nil
       end
 
       it "should use the ENV configuration" do
