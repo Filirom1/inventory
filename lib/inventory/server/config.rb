@@ -63,7 +63,7 @@ module Inventory
       def self.env()
         hash = {}
         ENV.each {|key, value|
-          next unless key.start_with? 'INVENTORY_'
+          next unless key.is_a? String and key.start_with? 'INVENTORY_'
           key = key.gsub 'INVENTORY_', ''
           key = key.downcase
           hash[key] = value
