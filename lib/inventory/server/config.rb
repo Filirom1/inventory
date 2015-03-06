@@ -70,7 +70,7 @@ module Inventory
         }
 
         # This is an ugly trick to auto cast data types
-        hash = YAML.load hash.map{|k,v| "#{k}: #{v}"}.join("\n")
+        hash = YAML.load(hash.map{|k,v| "#{k}: #{v}"}.join("\n")) || {}
 
         self.sym_keys! hash
         hash
