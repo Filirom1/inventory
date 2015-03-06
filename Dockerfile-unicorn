@@ -19,4 +19,5 @@ RUN mkdir -p /var/log/inventory && chmod o+rwX /var/log/inventory && \
 VOLUME ["/var/log/nginx", "/var/log/inventory"]
 
 EXPOSE 80
+WORKDIR /app
 CMD    ["/app/docker/unicorn/run-unicorn.sh"]
