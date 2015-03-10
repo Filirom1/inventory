@@ -15,6 +15,7 @@ RSpec.describe Inventory::Server::HTTPServer do
     middleware = lambda { |env|
       executed += 1
       raise 'my custom error message' if trigger_error
+      {"fact1" => 12}
     }
 
     # Proc.new is needed because Sinatra use lambda for lazy loading
@@ -33,7 +34,7 @@ RSpec.describe Inventory::Server::HTTPServer do
     it "should do the processing" do
       post '/api/v1/facts/MY_UUID', {"key" => "value"}
       expect(last_response).to be_ok
-      expect(last_response.body).to eq('{"id":"MY_UUID","ok":true,"status":200}')
+      expect(last_response.body).to eq('{"id":"MY_UUID","fact1":12}')
       expect(executed).to eq 1
     end
 
@@ -42,7 +43,7 @@ RSpec.describe Inventory::Server::HTTPServer do
       post '/api/v1/facts/MY_UUID', {"key" => "value"}
       expect(last_response).to_not be_ok
       expect(last_response.status).to eq 500
-      expect(last_response.body).to eq('{"id":"MY_UUID","ok":false,"status":500,"message":"my custom error message"}')
+      expect(last_response.body).to eq('{"id":"MY_UUID","message":"my custom error message"}')
       expect(executed).to eq 1
     end
 
@@ -51,7 +52,7 @@ RSpec.describe Inventory::Server::HTTPServer do
       post '/api/v1/facts/', {"key" => "value"}
       expect(last_response).to_not be_ok
       expect(last_response.status).to eq 404
-      expect(last_response.body).to eq('{"id":null,"ok":false,"status":404,"message":"Sinatra::NotFound"}')
+      expect(last_response.body).to eq('{"id":null,"message":"Sinatra::NotFound"}')
       expect(executed).to eq 0
     end
   end

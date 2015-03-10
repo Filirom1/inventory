@@ -37,12 +37,12 @@ module Inventory
         InventoryLogger.logger.context_id = id
 
         request.body.rewind
-        settings.middlewares.call(:id => id, :body => request.body.read, :config => settings.config)
-        {:id => id, :ok => true, :status => 200}.to_json
+        result = settings.middlewares.call({ :id => id, :body => request.body.read, :config => settings.config })
+        return {:id => id}.merge!(result).to_json
       end
 
       error 400..500 do
-        {:id => env[:id], :ok => false, :status => status, :message => env['sinatra.error']}.to_json
+        {:id => env[:id], :message => env['sinatra.error']}.to_json
       end
     end
   end

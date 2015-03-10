@@ -44,6 +44,7 @@ module Inventory
           end
         end
         @app.call(env)
+        facts
       end
 
       private
