@@ -8,12 +8,23 @@ RUN yum install -y patch tar git ruby ruby-devel rubygem-bundler make gcc gcc-c+
     http://puias.math.ias.edu/data/puias/unsupported/7/x86_64/rubygem-passenger-native-4.0.18-9.5.sdl7.x86_64.rpm \
     http://puias.math.ias.edu/data/puias/unsupported/7/x86_64/rubygem-passenger-native-libs-4.0.18-9.5.sdl7.x86_64.rpm
 
-ADD . /app
-
-RUN cd /app  && bundle install
-RUN cp /app/docker/passenger/passenger.conf /etc/httpd/conf.d/passenger.conf
 RUN mkdir -p /var/log/inventory && chmod o+rwX /var/log/inventory
 
+# optimize layer caching for bundle install
+RUN mkdir -p /tmp/lib/inventory/server
+ADD Gemfile /tmp/Gemfile
+ADD Gemfile.lock /tmp/Gemfile.lock
+ADD inventory-server.gemspec /tmp/inventory-server.gemspec
+ADD lib/inventory/server/version.rb /tmp/lib/inventory/server/version.rb
+RUN cd /tmp  && bundle install
+
 EXPOSE 80
+
+ADD . /app
+
+RUN cp /app/docker/passenger/passenger.conf /etc/httpd/conf.d/passenger.conf
+
+
 WORKDIR /app
+
 CMD    ["/app/docker/passenger/run-httpd.sh"]
