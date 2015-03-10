@@ -15,9 +15,9 @@ database:
 test:
   override:
     - docker-compose up -d
-    - docker-compose run web cd /app  && bundle install 
-    - docker-compose run web cd /app  && bundle exec rspec spec
-    - docker-compose run web cd /app  && bundle exec rspec spec --tag integration
+    - docker-compose run web bundle install 
+    - docker-compose run web bundle exec rspec spec
+    - docker-compose run web bundle exec rspec spec --tag integration
 
 deployment:
   prod:
