@@ -7,7 +7,6 @@ RUN yum install -y patch tar git ruby ruby-devel rubygem-bundler make gcc gcc-c+
 # optimize layer caching for bundle install
 RUN mkdir -p /tmp/lib/inventory/server
 ADD Gemfile /tmp/Gemfile
-ADD Gemfile.lock /tmp/Gemfile.lock
 ADD inventory-server.gemspec /tmp/inventory-server.gemspec
 ADD lib/inventory/server/version.rb /tmp/lib/inventory/server/version.rb
 RUN cd /tmp  && bundle install
