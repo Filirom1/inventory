@@ -2,7 +2,7 @@ require_relative '../../plugins/json_schema_validator'
 
 require 'rspec/mocks'
 
-noop = lambda {|env|}
+noop = lambda {|env| 42}
 
 config = Inventory::Server::Config::defaults
 
@@ -34,7 +34,8 @@ RSpec.describe Inventory::Server::JsonSchemaValidator, '#call' do
 
     context "without JSON schema" do
       it "should pass" do
-        Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
+        result = Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
+        expect(result).to eq 42
       end
     end
 

@@ -63,7 +63,8 @@ RSpec.describe Inventory::Server::Index, '#call' do
       env = {:id => 'MY_UUID', :facts => { :key => 'value' } }
       stub = stub_request(:put, "#{config[:es_host]}/inventory_facts/1-0-0/MY_UUID").to_return(:body => '{"OK": true}')
 
-      Inventory::Server::Index.new(noop, config).call(env)
+      result = Inventory::Server::Index.new(noop, config).call(env)
+      expect(result).to eq({ :key => 'value' })
 
       expect(stub).to have_been_requested
     end

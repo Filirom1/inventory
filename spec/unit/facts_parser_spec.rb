@@ -1,7 +1,7 @@
 # encoding: utf-8
 require_relative '../../plugins/facts_parser'
 
-noop = lambda {|env|}
+noop = lambda {|env| 42}
 
 RSpec.describe Inventory::Server::FactsParser, '#call' do
   context "without body" do
@@ -33,8 +33,9 @@ RSpec.describe Inventory::Server::FactsParser, '#call' do
 
   context "with good JSON" do
     env = { :body => '{"key":"value"}' }
-    it "should throw an error" do
-      Inventory::Server::FactsParser.new(noop, {}).call(env)
+    it "should not throw an error" do
+      result= Inventory::Server::FactsParser.new(noop, {}).call(env)
+      expect(result).to eq(42)
       expect(env[:facts]).to eq 'key' => 'value'
     end
   end

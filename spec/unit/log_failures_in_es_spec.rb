@@ -1,7 +1,7 @@
 require_relative '../../plugins/log_failures_in_es'
 require 'rspec/mocks'
 
-noop = lambda {|env|}
+noop = lambda {|env| 42}
 
 RSpec.describe Inventory::Server::LogFailuresInEs do
   config = { :failed_facts_dir => './log' , :es_failure_index => "itdiscovery-failures", :es_failure_type => "v1", :es_host => "http://localhost:9200"}
@@ -33,14 +33,15 @@ RSpec.describe Inventory::Server::LogFailuresInEs do
       it "should pass without writing anything" do
         expect(RestClient).to receive(:delete).with('http://localhost:9200/itdiscovery-failures/v1/MY_UUID')
         expect(RestClient).to_not receive(:put).with(any_args)
-        Inventory::Server::LogFailuresInEs.new(noop, config).call(env)
+        result = Inventory::Server::LogFailuresInEs.new(noop, config).call(env)
+        expect(result).to eq 42
       end
     end
 
     context "with error" do
       it "should write facts" do
         raise_error = lambda{ |e| raise "an error" }
-        expect(RestClient).to receive(:put).with('http://localhost:9200/itdiscovery-failures/v1/MY_UUID', /(?=.*my_body)(?=.*an error)(?=.*log_failures_in_es_spec.rb:42)/)
+        expect(RestClient).to receive(:put).with('http://localhost:9200/itdiscovery-failures/v1/MY_UUID', /(?=.*my_body)(?=.*an error)(?=.*log_failures_in_es_spec.rb:)/)
         expect {
           Inventory::Server::LogFailuresInEs.new(raise_error, config).call(env)
         }.to raise_error 'an error'

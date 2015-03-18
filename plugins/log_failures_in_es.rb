@@ -21,8 +21,9 @@ module Inventory
 
         url = "#{@config[:es_host]}/#{@config[:es_failure_index]}/#{@config[:es_failure_type]}/#{id}"
         begin
-          @app.call(env)
+          result = @app.call(env)
           RestClient.delete(url)
+          return result
         rescue => e
           InventoryLogger.logger.error $!
           InventoryLogger.logger.error "#{e.backtrace}"

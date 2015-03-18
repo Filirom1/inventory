@@ -1,7 +1,7 @@
 require_relative '../../plugins/log_failures_on_disk'
 require 'rspec/mocks'
 
-noop = lambda {|env|}
+noop = lambda {|env| 42 }
 
 RSpec.describe Inventory::Server::LogFailuresOnDisk do
   config = { :failed_facts_dir => './log' }
@@ -31,8 +31,9 @@ RSpec.describe Inventory::Server::LogFailuresOnDisk do
 
     context "without error" do
       it "should pass without writing anything" do
-        Inventory::Server::LogFailuresOnDisk.new(noop, config).call(env)
         expect(File).to_not receive(:write)
+        result = Inventory::Server::LogFailuresOnDisk.new(noop, config).call(env)
+        expect(result).to eq 42
       end
     end
 
