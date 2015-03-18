@@ -23,6 +23,7 @@ RSpec.describe Inventory::Server::JsonSchemaValidator, '#call' do
   context "without version and type" do
     env = { :facts => { 'key' => 'value'} }
     it "should use the default config" do
+      expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/facts.json").and_return false
       expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/facts/1-0-0.json").and_return false
       Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
     end
@@ -39,29 +40,51 @@ RSpec.describe Inventory::Server::JsonSchemaValidator, '#call' do
 
     context "with JSON schema" do
       it "should fail if the file is not redable" do
-        expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return true
+        expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/my_fact.json").and_return true
         expect {
           Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
         }.to raise_error Errno::ENOENT
       end
 
       it "should fail if the file is not a valid JSON" do
-        expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return true
-        expect(File).to receive(:read).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return '{"dsf": dsf}'
+        expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/my_fact.json").and_return true
+        expect(File).to receive(:read).with("#{config[:json_schema_dir]}/my_fact.json").and_return '{"dsf": dsf}'
         expect {
           Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
         }.to raise_error MultiJson::ParseError
       end
 
-      it "should fail if the facts do not respect the type" do
+      it "should fail if the facts do not respect the type json schema" do
         schema = {
           "type" => "object",
           "properties" => {
             "key"=> {"type" => "integer" }
           }
         }
+        expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/my_fact.json").and_return true
+        expect(File).to receive(:read).with("#{config[:json_schema_dir]}/my_fact.json").and_return schema.to_json
+        expect {
+          Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
+        }.to raise_error JSON::Schema::ValidationError
+      end
+
+      it "should fail if the facts do not respect the version json schema" do
+        type_schema = {
+          "type" => "object",
+          "properties" => {
+          }
+        }
+        version_schema = {
+          "type" => "object",
+          "properties" => {
+            "key"=> {"type" => "integer" }
+          }
+        }
+        expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/my_fact.json").and_return true
         expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return true
-        expect(File).to receive(:read).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return schema.to_json
+
+        expect(File).to receive(:read).with("#{config[:json_schema_dir]}/my_fact.json").and_return type_schema.to_json
+        expect(File).to receive(:read).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return version_schema.to_json
         expect {
           Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
         }.to raise_error JSON::Schema::ValidationError
@@ -74,7 +97,10 @@ RSpec.describe Inventory::Server::JsonSchemaValidator, '#call' do
             "key"=> {"type" => "string" }
           }
         }
+        expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/my_fact.json").and_return true
         expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return true
+
+        expect(File).to receive(:read).with("#{config[:json_schema_dir]}/my_fact.json").and_return schema.to_json
         expect(File).to receive(:read).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return schema.to_json
 
         Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
@@ -86,7 +112,10 @@ RSpec.describe Inventory::Server::JsonSchemaValidator, '#call' do
           "properties" => {
           }
         }
+        expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/my_fact.json").and_return true
         expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return true
+
+        expect(File).to receive(:read).with("#{config[:json_schema_dir]}/my_fact.json").and_return schema.to_json
         expect(File).to receive(:read).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return schema.to_json
 
         Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
@@ -99,7 +128,10 @@ RSpec.describe Inventory::Server::JsonSchemaValidator, '#call' do
             "optional"=> {"type" => "string" }
           }
         }
+        expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/my_fact.json").and_return true
         expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return true
+
+        expect(File).to receive(:read).with("#{config[:json_schema_dir]}/my_fact.json").and_return schema.to_json
         expect(File).to receive(:read).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return schema.to_json
 
         Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
@@ -113,8 +145,8 @@ RSpec.describe Inventory::Server::JsonSchemaValidator, '#call' do
             "mandatory"=> {"type" => "string" }
           }
         }
-        expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return true
-        expect(File).to receive(:read).with("#{config[:json_schema_dir]}/my_fact/my_version.json").and_return schema.to_json
+        expect(File).to receive(:file?).with("#{config[:json_schema_dir]}/my_fact.json").and_return true
+        expect(File).to receive(:read).with("#{config[:json_schema_dir]}/my_fact.json").and_return schema.to_json
 
         expect {
           Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
