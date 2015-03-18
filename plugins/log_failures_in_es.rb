@@ -24,6 +24,10 @@ module Inventory
           @app.call(env)
           RestClient.delete(url)
         rescue => e
+          InventoryLogger.logger.error $!
+          InventoryLogger.logger.error "#{e.backtrace}"
+          InventoryLogger.logger.error "Failed facts stored on #{url}"
+    
           env['error_message'] = $!
           env['stack_trace'] = "#{e.backtrace}"
 
