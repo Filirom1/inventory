@@ -22,7 +22,7 @@ module Inventory
         url = "#{@config[:es_host]}/#{@config[:es_failure_index]}/#{@config[:es_failure_type]}/#{id}"
         begin
           result = @app.call(env)
-          RestClient.delete(url)
+          RestClient.delete(url) rescue result
           return result
         rescue => e
           InventoryLogger.logger.error $!
@@ -32,7 +32,12 @@ module Inventory
           env['error_message'] = $!
           env['stack_trace'] = "#{e.backtrace}"
 
-          RestClient.put(url, env.to_json)
+          begin
+            RestClient.put(url, env.to_json) 
+          rescue => e
+            InventoryLogger.logger.error "Fail to store failed facts #{e}: #{e.response}"
+            raise e
+          end
 
           raise e
         end

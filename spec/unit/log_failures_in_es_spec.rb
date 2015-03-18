@@ -36,6 +36,12 @@ RSpec.describe Inventory::Server::LogFailuresInEs do
         result = Inventory::Server::LogFailuresInEs.new(noop, config).call(env)
         expect(result).to eq 42
       end
+
+      it "should pass without even when ES fails to delete the error document" do
+        expect(RestClient).to receive(:delete).with('http://localhost:9200/itdiscovery-failures/v1/MY_UUID').and_raise('404 Not Found')
+        result = Inventory::Server::LogFailuresInEs.new(noop, config).call(env)
+        expect(result).to eq 42
+      end
     end
 
     context "with error" do
