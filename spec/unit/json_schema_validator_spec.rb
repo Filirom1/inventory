@@ -29,6 +29,14 @@ RSpec.describe Inventory::Server::JsonSchemaValidator, '#call' do
     end
   end
 
+  context "with type and version integer" do
+    env = { :facts => { 'key' => 'value', 'type' => 1, 'version' => 1.0} }
+    it "should pass" do
+      result = Inventory::Server::JsonSchemaValidator.new(noop, config).call(env)
+      expect(result).to eq 42
+    end
+  end
+
   context "with facts" do
     env = { :facts => { 'key' => 'value', 'type' => 'my_fact', 'version' => 'my_version' } }
 

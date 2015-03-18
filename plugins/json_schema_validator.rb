@@ -19,7 +19,7 @@ module Inventory
         version = facts[@config[:version_key]] || @config[:version_default]
 
         schema_type_file = File.join @config[:json_schema_dir], "#{type}.json"
-        schema_version_file = File.join @config[:json_schema_dir], type, "#{version}.json"
+        schema_version_file = File.join @config[:json_schema_dir], type.to_s, "#{version}.json"
 
         if File.file? schema_type_file
           InventoryLogger.logger.info "Use JSON Schema #{schema_type_file}"
