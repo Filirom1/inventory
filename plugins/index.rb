@@ -28,10 +28,9 @@ module Inventory
         raise InventoryError.new 'id is missing' if id.nil? || id.empty?
         raise InventoryError.new 'facts is missing' if facts.nil?
 
-        type = facts[@config[:type_key]] || @config[:type_default]
         version = facts[@config[:version_key]] || @config[:version_default]
 
-        url = clean_string "#{@config[:es_host]}/#{@config[:es_index_prefix]}#{type}/#{version}/#{id}"
+        url = clean_string "#{@config[:es_host]}/#{@config[:es_index_prefix]}#{week_number}/#{version}/#{id}"
 
         begin
           response = RestClient.put(url, facts.to_json)
@@ -51,6 +50,10 @@ module Inventory
 
       def clean_string(str)
         str.gsub('.', '-').gsub(' ', '_').encode(Encoding.find('ASCII'), :invalid => :replace, :undef => :replace, :replace => '')
+      end
+
+      def week_number
+        Time.now.strftime('%W')
       end
     end
   end
